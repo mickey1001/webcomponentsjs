@@ -1,4 +1,7 @@
-(function(){'use strict';/**
+(function () {
+'use strict';
+
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,5 +9,2325 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/function e(Ye){return Ye=a(Ye),u(d(Ye),Ye)}function a(Ye){return Ye.replace(V.comments,'').replace(V.port,'')}function d(Ye){let Ge={start:0,end:Ye.length},qe=Ge;for(let We=0,ze=Ye.length;We<ze;We++)if(Ye[We]===K){qe.rules||(qe.rules=[]);let $e=qe,Qe=$e.rules[$e.rules.length-1];qe={start:We+1,parent:$e,previous:Qe},$e.rules.push(qe)}else Ye[We]===X&&(qe.end=We+1,qe=qe.parent||Ge);return Ge}function u(Ye,Ge){let qe=Ge.substring(Ye.start,Ye.end-1);if(Ye.parsedCssText=Ye.cssText=qe.trim(),Ye.parent){let ze=Ye.previous?Ye.previous.end:Ye.parent.start;qe=Ge.substring(ze,Ye.start-1),qe=y(qe),qe=qe.replace(V.multipleSpaces,' '),qe=qe.substring(qe.lastIndexOf(';')+1);let $e=Ye.parsedSelector=Ye.selector=qe.trim();Ye.atRule=0===$e.indexOf('@'),Ye.atRule?0===$e.indexOf('@media')?Ye.type=U.MEDIA_RULE:$e.match(V.keyframesRule)&&(Ye.type=U.KEYFRAMES_RULE,Ye.keyframesName=Ye.selector.split(V.multipleSpaces).pop()):0===$e.indexOf(j)?Ye.type=U.MIXIN_RULE:Ye.type=U.STYLE_RULE}let We=Ye.rules;if(We)for(let Qe,ze=0,$e=We.length;ze<$e&&(Qe=We[ze]);ze++)u(Qe,Ge);return Ye}function y(Ye){return Ye.replace(/\\([0-9a-f]{1,6})\s/gi,function(){let Ge=arguments[1],qe=6-Ge.length;for(;qe--;)Ge='0'+Ge;return'\\'+Ge})}function _(Ye,Ge,qe){qe=qe||'';let We='';if(Ye.cssText||Ye.rules){let ze=Ye.rules;if(ze&&!S(ze))for(let Ze,$e=0,Qe=ze.length;$e<Qe&&(Ze=ze[$e]);$e++)We=_(Ze,Ge,We);else We=Ge?Ye.cssText:h(Ye.cssText),We=We.trim(),We&&(We='  '+We+'\n')}return We&&(Ye.selector&&(qe+=Ye.selector+' '+K+'\n'),qe+=We,Ye.selector&&(qe+=X+'\n\n')),qe}function S(Ye){return 0===Ye[0].selector.indexOf(j)}function h(Ye){return Ye=g(Ye),C(Ye)}function g(Ye){return Ye.replace(V.customProp,'').replace(V.mixinProp,'')}function C(Ye){return Ye.replace(V.mixinApply,'').replace(V.varApply,'')}function T(Ye){Ye&&(q=q&&!Ye.shimcssproperties,G=G&&!Ye.shimshadow)}function A(Ye,Ge){return'string'==typeof Ye&&(Ye=e(Ye)),Ge&&P(Ye,Ge),_(Ye,q)}function N(Ye){return!Ye.__cssRules&&Ye.textContent&&(Ye.__cssRules=e(Ye.textContent)),Ye.__cssRules}function R(Ye){return Ye.parent&&Ye.parent.type===U.KEYFRAMES_RULE}function P(Ye,Ge,qe,We){if(Ye){let ze=!1;if(We&&Ye.type===U.MEDIA_RULE){let Qe=Ye.selector.match($.MEDIA_MATCH);Qe&&!window.matchMedia(Qe[1]).matches&&(ze=!0)}Ye.type===U.STYLE_RULE?Ge(Ye):qe&&Ye.type===U.KEYFRAMES_RULE?qe(Ye):Ye.type===U.MIXIN_RULE&&(ze=!0);let $e=Ye.rules;if($e&&!ze)for(let Je,Qe=0,Ze=$e.length;Qe<Ze&&(Je=$e[Qe]);Qe++)P(Je,Ge,qe,We)}}function I(Ye,Ge,qe,We){let ze=M(Ye,Ge);return O(ze,qe,We)}function O(Ye,Ge,qe){Ge=Ge||document.head;let We=qe&&qe.nextSibling||Ge.firstChild;return z=Ye,Ge.insertBefore(Ye,We)}function M(Ye,Ge){let qe=document.createElement('style');return Ge&&qe.setAttribute('scope',Ge),qe.textContent=Ye,qe}function b(Ye){let Ge=document.createComment(' Shady DOM styles for '+Ye+' '),qe=z?z.nextSibling:null,We=document.head;return We.insertBefore(Ge,qe||We.firstChild),z=Ge,Ge}function w(Ye,Ge){let qe=0;for(let We=Ge,ze=Ye.length;We<ze;We++)if('('===Ye[We])qe++;else if(')'===Ye[We]&&0==--qe)return We;return-1}function L(Ye,Ge){let qe=Ye.indexOf('var(');if(-1===qe)return Ge(Ye,'','','');let We=w(Ye,qe+3),ze=Ye.substring(qe+4,We),$e=Ye.substring(0,qe),Qe=L(Ye.substring(We+1),Ge),Ze=ze.indexOf(',');if(-1===Ze)return Ge($e,ze.trim(),'',Qe);let Je=ze.substring(0,Ze).trim(),et=ze.substring(Ze+1).trim();return Ge($e,Je,et,Qe)}function H(Ye,Ge){window.ShadyDOM?window.ShadyDOM.nativeMethods.setAttribute.call(Ye,'class',Ge):Ye.setAttribute('class',Ge)}function D(Ye,Ge){let qe=parseInt(Ye/32);Ge[qe]=(Ge[qe]||0)|1<<Ye%32}function F(){Xe||(Xe=!0,window.HTMLImports?window.HTMLImports.whenReady(k):'complete'===document.readyState?k():document.addEventListener('readystatechange',()=>{'complete'===document.readyState&&k()}))}function k(){requestAnimationFrame(()=>{(Xe||Ke._elementsHaveApplied)&&Ke.updateStyles(),Xe=!1})}let U={STYLE_RULE:1,KEYFRAMES_RULE:7,MEDIA_RULE:4,MIXIN_RULE:1e3},K='{',X='}',V={comments:/\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim,port:/@import[^;]*;/gim,customProp:/(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?(?:[;\n]|$)/gim,mixinProp:/(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?{[^}]*?}(?:[;\n]|$)?/gim,mixinApply:/@apply\s*\(?[^);]*\)?\s*(?:[;\n]|$)?/gim,varApply:/[^;:]*?:[^;]*?var\([^;]*\)(?:[;\n]|$)?/gim,keyframesRule:/^@[^\s]*keyframes/,multipleSpaces:/\s+/g},j='--',G=!(window.ShadyDOM&&window.ShadyDOM.inUse),q=!navigator.userAgent.match('AppleWebKit/601')&&window.CSS&&CSS.supports&&CSS.supports('box-shadow','0 0 0 var(--foo)');window.ShadyCSS?T(window.ShadyCSS):window.WebComponents&&T(window.WebComponents.flags);let z=null,$={VAR_ASSIGN:/(?:^|[;\s{]\s*)(--[\w-]*?)\s*:\s*(?:([^;{]*)|{([^}]*)})(?:(?=[;\s}])|$)/gi,MIXIN_MATCH:/(?:^|\W+)@apply\s*\(?([^);\n]*)\)?/gi,VAR_CONSUMED:/(--[\w-]+)\s*([:,;)]|$)/gi,ANIMATION_MATCH:/(animation\s*:)|(animation-name\s*:)/,MEDIA_MATCH:/@media[^(]*(\([^)]*\))/,IS_VAR:/^--/,BRACKETED:/\{[^}]*\}/g,HOST_PREFIX:'(?:^|[^.#[:])',HOST_SUFFIX:'($|[.:[\\s>+~])'};const Q='style-scope';class Z{get SCOPE_NAME(){return Q}dom(Ye,Ge,qe){Ye.__styleScoped?Ye.__styleScoped=null:this._transformDom(Ye,Ge||'',qe)}_transformDom(Ye,Ge,qe){Ye.nodeType===Node.ELEMENT_NODE&&this.element(Ye,Ge,qe);let We='template'===Ye.localName?(Ye.content||Ye._content).childNodes:Ye.children||Ye.childNodes;if(We)for(let ze=0;ze<We.length;ze++)this._transformDom(We[ze],Ge,qe)}element(Ye,Ge,qe){if(Ge)if(Ye.classList)qe?(Ye.classList.remove(Q),Ye.classList.remove(Ge)):(Ye.classList.add(Q),Ye.classList.add(Ge));else if(Ye.getAttribute){let We=Ye.getAttribute('class');if(!qe){let ze=(We?We+' ':'')+Q+' '+Ge;H(Ye,ze)}else if(We){let ze=We.replace(Q,'').replace(Ge,'');H(Ye,ze)}}}elementStyles(Ye,Ge,qe){let We=Ye.__cssBuild,ze=G||'shady'===We?A(Ge,qe):this.css(Ge,Ye.is,Ye.extends,qe)+'\n\n';return ze.trim()}css(Ye,Ge,qe,We){let ze=this._calcHostScope(Ge,qe);Ge=this._calcElementScope(Ge);let $e=this;return A(Ye,function(Qe){Qe.isScoped||($e.rule(Qe,Ge,ze),Qe.isScoped=!0),We&&We(Qe,Ge,ze)})}_calcElementScope(Ye){return Ye?'.'+Ye:''}_calcHostScope(Ye,Ge){return Ge?'[is='+Ye+']':Ye}rule(Ye,Ge,qe){this._transformRule(Ye,this._transformComplexSelector,Ge,qe)}_transformRule(Ye,Ge,qe,We){Ye.selector=Ye.transformedSelector=this._transformRuleCss(Ye,Ge,qe,We)}_transformRuleCss(Ye,Ge,qe,We){let ze=Ye.selector.split(te);if(!R(Ye))for(let Ze,$e=0,Qe=ze.length;$e<Qe&&(Ze=ze[$e]);$e++)ze[$e]=Ge.call(this,Ze,qe,We);return ze.join(te)}_transformComplexSelector(Ye,Ge,qe){let We=!1;return Ye=Ye.trim(),Ye=Ye.replace(J,(ze,$e,Qe)=>`:${$e}(${Qe.replace(/\s/g,'')})`),Ye=Ye.replace(ae,`${ne} $1`),Ye=Ye.replace(se,(ze,$e,Qe)=>{if(!We){let Ze=this._transformCompoundSelector(Qe,$e,Ge,qe);We=We||Ze.stop,$e=Ze.combinator,Qe=Ze.value}return $e+Qe}),Ye}_transformCompoundSelector(Ye,Ge,qe,We){let ze=Ye.indexOf(le);0<=Ye.indexOf(ne)?Ye=this._transformHostSelector(Ye,We):0!==ze&&(Ye=qe?this._transformSimpleSelector(Ye,qe):Ye);let $e=!1;0<=ze&&(Ge='',$e=!0);let Qe;return $e&&(Qe=!0,$e&&(Ye=Ye.replace(pe,(Ze,Je)=>` > ${Je}`))),Ye=Ye.replace(de,(Ze,Je,et)=>`[dir="${et}"] ${Je}, ${Je}[dir="${et}"]`),{value:Ye,combinator:Ge,stop:Qe}}_transformSimpleSelector(Ye,Ge){let qe=Ye.split(ue);return qe[0]+=Ge,qe.join(ue)}_transformHostSelector(Ye,Ge){let qe=Ye.match(ie),We=qe&&qe[2].trim()||'';if(We){if(!We[0].match(re)){let ze=We.split(re)[0];return ze===Ge?We:'should_not_match'}return Ye.replace(ie,function(ze,$e,Qe){return Ge+Qe})}return Ye.replace(ne,Ge)}documentRule(Ye){Ye.selector=Ye.parsedSelector,this.normalizeRootSelector(Ye),this._transformRule(Ye,this._transformDocumentSelector)}normalizeRootSelector(Ye){Ye.selector===':root'&&(Ye.selector='html')}_transformDocumentSelector(Ye){return Ye.match(le)?this._transformComplexSelector(Ye,ee):this._transformSimpleSelector(Ye.trim(),ee)}}let J=/:(nth[-\w]+)\(([^)]+)\)/,ee=`:not(.${Q})`,te=',',se=/(^|[\s>+~]+)((?:\[.+?\]|[^\s>+~=\[])+)/g,re=/[[.:#*]/,ne=':host',le='::slotted',ae=/^(::slotted)/,ie=/(:host)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/,pe=/(?:::slotted)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/,de=/(.*):dir\((?:(ltr|rtl))\)/,ue=':';var fe=new Z,Se={};const he=Promise.resolve();class ge{static get(Ye){return Ye.__styleInfo}static set(Ye,Ge){return Ye.__styleInfo=Ge,Ge}static invalidate(Ye){Se[Ye]&&(Se[Ye]._applyShimInvalid=!0)}static startValidating(Ye){const Ge=Se[Ye];Ge._validating||(Ge._validating=!0,he.then(()=>{Ge._applyShimInvalid=!1,Ge._validating=!1}))}constructor(Ye,Ge,qe,We,ze,$e){this.styleRules=Ye||null,this.placeholder=Ge||null,this.ownStylePropertyNames=qe||[],this.overrideStyleProperties=null,this.elementName=We||'',this.cssBuild=$e||'',this.typeExtension=ze||'',this.styleProperties=null,this.scopeSelector=null,this.customStyle=null}}const xe=window.Element.prototype,Ce=xe.matches||xe.matchesSelector||xe.mozMatchesSelector||xe.msMatchesSelector||xe.oMatchesSelector||xe.webkitMatchesSelector,Ee=navigator.userAgent.match('Trident'),Te='x-scope';class Ae{get XSCOPE_NAME(){return Te}decorateStyles(Ye){let Ge=this,qe={},We=[],ze=0;P(Ye,function(Qe){Ge.decorateRule(Qe),Qe.index=ze++,Ge.collectPropertiesInCssText(Qe.propertyInfo.cssText,qe)},function(Ze){We.push(Ze)}),Ye._keyframes=We;let $e=[];for(let Qe in qe)$e.push(Qe);return $e}decorateRule(Ye){if(Ye.propertyInfo)return Ye.propertyInfo;let Ge={},qe={},We=this.collectProperties(Ye,qe);return We&&(Ge.properties=qe,Ye.rules=null),Ge.cssText=this.collectCssText(Ye),Ye.propertyInfo=Ge,Ge}collectProperties(Ye,Ge){let qe=Ye.propertyInfo;if(!qe){let We,ze=$.VAR_ASSIGN,$e=Ye.parsedCssText,Qe,Ze;for(;We=ze.exec($e);)Qe=(We[2]||We[3]).trim(),('inherit'!==Qe||'unset'!==Qe)&&(Ge[We[1].trim()]=Qe),Ze=!0;return Ze}else if(qe.properties)return Object.assign(Ge,qe.properties),!0}collectCssText(Ye){return this.collectConsumingCssText(Ye.parsedCssText)}collectConsumingCssText(Ye){return Ye.replace($.BRACKETED,'').replace($.VAR_ASSIGN,'')}collectPropertiesInCssText(Ye,Ge){for(let qe,We;qe=$.VAR_CONSUMED.exec(Ye);)We=qe[1],':'!==qe[2]&&(Ge[We]=!0)}reify(Ye){let Ge=Object.getOwnPropertyNames(Ye);for(let We,qe=0;qe<Ge.length;qe++)We=Ge[qe],Ye[We]=this.valueForProperty(Ye[We],Ye)}valueForProperty(Ye,Ge){if(Ye)if(0<=Ye.indexOf(';'))Ye=this.valueForProperties(Ye,Ge);else{let qe=this;Ye=L(Ye,function(ze,$e,Qe,Ze){if(!$e)return ze+Ze;let Je=qe.valueForProperty(Ge[$e],Ge);return Je&&'initial'!==Je?'apply-shim-inherit'===Je&&(Je='inherit'):Je=qe.valueForProperty(Ge[Qe]||Qe,Ge)||Qe,ze+(Je||'')+Ze})}return Ye&&Ye.trim()||''}valueForProperties(Ye,Ge){let qe=Ye.split(';');for(let ze,$e,We=0;We<qe.length;We++)if(ze=qe[We]){if($.MIXIN_MATCH.lastIndex=0,$e=$.MIXIN_MATCH.exec(ze),$e)ze=this.valueForProperty(Ge[$e[1]],Ge);else{let Qe=ze.indexOf(':');if(-1!==Qe){let Ze=ze.substring(Qe);Ze=Ze.trim(),Ze=this.valueForProperty(Ze,Ge)||Ze,ze=ze.substring(0,Qe)+Ze}}qe[We]=ze&&ze.lastIndexOf(';')===ze.length-1?ze.slice(0,-1):ze||''}return qe.join(';')}applyProperties(Ye,Ge){let qe='';Ye.propertyInfo||this.decorateRule(Ye),Ye.propertyInfo.cssText&&(qe=this.valueForProperties(Ye.propertyInfo.cssText,Ge)),Ye.cssText=qe}applyKeyframeTransforms(Ye,Ge){let qe=Ye.cssText,We=Ye.cssText;if(null==Ye.hasAnimations&&(Ye.hasAnimations=$.ANIMATION_MATCH.test(qe)),Ye.hasAnimations){let ze;if(null==Ye.keyframeNamesToTransform)for(let $e in Ye.keyframeNamesToTransform=[],Ge)ze=Ge[$e],We=ze(qe),qe!==We&&(qe=We,Ye.keyframeNamesToTransform.push($e));else{for(let $e=0;$e<Ye.keyframeNamesToTransform.length;++$e)ze=Ge[Ye.keyframeNamesToTransform[$e]],qe=ze(qe);We=qe}}Ye.cssText=We}propertyDataFromStyles(Ye,Ge){let qe={},We=this,ze=[];return P(Ye,function($e){$e.propertyInfo||We.decorateRule($e);let Qe=$e.transformedSelector||$e.parsedSelector;Ge&&$e.propertyInfo.properties&&Qe&&Ce.call(Ge,Qe)&&(We.collectProperties($e,qe),D($e.index,ze))},null,!0),{properties:qe,key:ze}}whenHostOrRootRule(Ye,Ge,qe,We){if(Ge.propertyInfo||this.decorateRule(Ge),!!Ge.propertyInfo.properties){let ze=Ye.is?fe._calcHostScope(Ye.is,Ye.extends):'html',$e=Ge.parsedSelector,Qe=':host > *'===$e||'html'===$e,Ze=0===$e.indexOf(':host')&&!Qe;if('shady'===qe&&(Qe=$e===ze+' > *.'+ze||-1!==$e.indexOf('html'),Ze=!Qe&&0===$e.indexOf(ze)),'shadow'===qe&&(Qe=':host > *'===$e||'html'===$e,Ze=Ze&&!Qe),Qe||Ze){let Je=ze;Ze&&(G&&!Ge.transformedSelector&&(Ge.transformedSelector=fe._transformRuleCss(Ge,fe._transformComplexSelector,fe._calcElementScope(Ye.is),ze)),Je=Ge.transformedSelector||ze),We({selector:Je,isHost:Ze,isRoot:Qe})}}}hostAndRootPropertiesForScope(Ye,Ge){let qe={},We={},ze=this,$e=Ge&&Ge.__cssBuild;return P(Ge,function(Qe){ze.whenHostOrRootRule(Ye,Qe,$e,function(Ze){let Je=Ye._element||Ye;Ce.call(Je,Ze.selector)&&(Ze.isHost?ze.collectProperties(Qe,qe):ze.collectProperties(Qe,We))})},null,!0),{rootProps:We,hostProps:qe}}transformStyles(Ye,Ge,qe){let We=this,ze=fe._calcHostScope(Ye.is,Ye.extends),$e=Ye.extends?'\\'+ze.slice(0,-1)+'\\]':ze,Qe=new RegExp($.HOST_PREFIX+$e+$.HOST_SUFFIX),Ze=ge.get(Ye).styleRules,Je=this._elementKeyframeTransforms(Ye,Ze,qe);return fe.elementStyles(Ye,Ze,function(et){We.applyProperties(et,Ge),G||R(et)||!et.cssText||(We.applyKeyframeTransforms(et,Je),We._scopeSelector(et,Qe,ze,qe))})}_elementKeyframeTransforms(Ye,Ge,qe){let We=Ge._keyframes,ze={};if(!G&&We)for(let $e=0,Qe=We[$e];$e<We.length;Qe=We[++$e])this._scopeKeyframes(Qe,qe),ze[Qe.keyframesName]=this._keyframesRuleTransformer(Qe);return ze}_keyframesRuleTransformer(Ye){return function(Ge){return Ge.replace(Ye.keyframesNameRx,Ye.transformedKeyframesName)}}_scopeKeyframes(Ye,Ge){Ye.keyframesNameRx=new RegExp(Ye.keyframesName,'g'),Ye.transformedKeyframesName=Ye.keyframesName+'-'+Ge,Ye.transformedSelector=Ye.transformedSelector||Ye.selector,Ye.selector=Ye.transformedSelector.replace(Ye.keyframesName,Ye.transformedKeyframesName)}_scopeSelector(Ye,Ge,qe,We){Ye.transformedSelector=Ye.transformedSelector||Ye.selector;let ze=Ye.transformedSelector,$e='.'+We,Qe=ze.split(',');for(let et,Ze=0,Je=Qe.length;Ze<Je&&(et=Qe[Ze]);Ze++)Qe[Ze]=et.match(Ge)?et.replace(qe,$e):$e+' '+et;Ye.selector=Qe.join(',')}applyElementScopeSelector(Ye,Ge,qe){let We=Ye.getAttribute('class')||'',ze=We;qe&&(ze=We.replace(new RegExp('\\s*'+Te+'\\s*'+qe+'\\s*','g'),' ')),ze+=(ze?' ':'')+Te+' '+Ge,We!==ze&&H(Ye,ze)}applyElementStyle(Ye,Ge,qe,We){let ze=We?We.textContent||'':this.transformStyles(Ye,Ge,qe),$e=ge.get(Ye),Qe=$e.customStyle;return Qe&&!G&&Qe!==We&&(Qe._useCount--,0>=Qe._useCount&&Qe.parentNode&&Qe.parentNode.removeChild(Qe)),G?$e.customStyle?($e.customStyle.textContent=ze,We=$e.customStyle):ze&&(We=I(ze,qe,Ye.shadowRoot,$e.placeholder)):We?!We.parentNode&&O(We,null,$e.placeholder):ze&&(We=I(ze,qe,null,$e.placeholder)),We&&(We._useCount=We._useCount||0,$e.customStyle!=We&&We._useCount++,$e.customStyle=We),Ee&&(We.textContent=We.textContent),We}applyCustomStyle(Ye,Ge){let qe=N(Ye),We=this;Ye.textContent=A(qe,function(ze){let $e=ze.cssText=ze.parsedCssText;ze.propertyInfo&&ze.propertyInfo.cssText&&($e=g($e),ze.cssText=We.valueForProperties($e,Ge))})}}var Ne=new Ae;let Re={};const ve=window.customElements;if(ve&&!G){const Ye=ve.define;ve.define=function(Ge,qe,We){return Re[Ge]=b(Ge),Ye.call(ve,Ge,qe,We)}}let Ie=$.MIXIN_MATCH,Oe=$.VAR_ASSIGN,Me=/;\s*/m,be=/^\s*(initial)|(inherit)\s*$/,we='_-_';class Le{constructor(){this._map={}}set(Ye,Ge){Ye=Ye.trim(),this._map[Ye]={properties:Ge,dependants:{}}}get(Ye){return Ye=Ye.trim(),this._map[Ye]}}class He{constructor(){this._currentTemplate=null,this._measureElement=null,this._map=new Le,this._separator=we,this._boundProduceCssProperties=(Ye,Ge,qe,We)=>this._produceCssProperties(Ye,Ge,qe,We)}detectMixin(Ye){const Ge=Ie.test(Ye)||Oe.test(Ye);return Ie.lastIndex=0,Oe.lastIndex=0,Ge}transformStyle(Ye,Ge){let qe=N(Ye);return this.transformRules(qe,Ge),qe}transformRules(Ye,Ge){this._currentTemplate=Se[Ge],P(Ye,qe=>{this.transformRule(qe)}),this._currentTemplate=null}transformRule(Ye){Ye.cssText=this.transformCssText(Ye.parsedCssText),':root'===Ye.selector&&(Ye.selector=':host > *')}transformCssText(Ye){return Ye=Ye.replace(Oe,this._boundProduceCssProperties),this._consumeCssProperties(Ye)}_getInitialValueForProperty(Ye){return this._measureElement||(this._measureElement=document.createElement('meta'),this._measureElement.style.all='initial',document.head.appendChild(this._measureElement)),window.getComputedStyle(this._measureElement).getPropertyValue(Ye)}_consumeCssProperties(Ye){for(let Ge;Ge=Ie.exec(Ye);){let qe=Ge[0],We=Ge[1],ze=Ge.index,$e=ze+qe.indexOf('@apply'),Qe=ze+qe.length,Ze=Ye.slice(0,$e),Je=Ye.slice(Qe),et=this._cssTextToMap(Ze),tt=this._atApplyToCssProperties(We,et);Ye=[Ze,tt,Je].join(''),Ie.lastIndex=ze+tt.length}return Ye}_atApplyToCssProperties(Ye,Ge){Ye=Ye.replace(Me,'');let qe=[],We=this._map.get(Ye);if(We||(this._map.set(Ye,{}),We=this._map.get(Ye)),We){this._currentTemplate&&(We.dependants[this._currentTemplate.name]=this._currentTemplate);let ze,$e,Qe;for(ze in We.properties)Qe=Ge&&Ge[ze],$e=[ze,': var(',Ye,we,ze],Qe&&$e.push(',',Qe),$e.push(')'),qe.push($e.join(''))}return qe.join('; ')}_replaceInitialOrInherit(Ye,Ge){let qe=be.exec(Ge);return qe&&(qe[1]?Ge=He._getInitialValueForProperty(Ye):Ge='apply-shim-inherit'),Ge}_cssTextToMap(Ye){let Ge=Ye.split(';'),qe,We,ze={};for(let Qe,Ze,$e=0;$e<Ge.length;$e++)Qe=Ge[$e],Qe&&(Ze=Qe.split(':'),1<Ze.length&&(qe=Ze[0].trim(),We=this._replaceInitialOrInherit(qe,Ze.slice(1).join(':')),ze[qe]=We));return ze}_invalidateMixinEntry(Ye){for(let Ge in Ye.dependants)this._currentTemplate&&Ge===this._currentTemplate.name||ge.invalidate(Ge)}_produceCssProperties(Ye,Ge,qe,We){if(qe&&L(qe,(ot,lt)=>{lt&&this._map.get(lt)&&(We='@apply '+lt+';')}),!We)return Ye;let ze=this._consumeCssProperties(We),$e=Ye.slice(0,Ye.indexOf('--')),Qe=this._cssTextToMap(ze),Ze=Qe,Je=this._map.get(Ge),et=Je&&Je.properties;et?Ze=Object.assign(Object.create(et),Qe):this._map.set(Ge,Ze);let st,rt,tt=[],nt=!1;for(st in Ze)rt=Qe[st],void 0==rt&&(rt='initial'),et&&!(st in et)&&(nt=!0),tt.push(Ge+we+st+': '+rt);return nt&&this._invalidateMixinEntry(Je),Je&&(Je.properties=Ze),qe&&($e=Ye+';'+$e),$e+tt.join('; ')+';'}}let De=new He;window.ApplyShim=De;let Fe=function(){};if(!G){let Ye=$e=>{return $e.classList&&!$e.classList.contains(fe.SCOPE_NAME)||$e instanceof SVGElement&&(!$e.hasAttribute('class')||0>$e.getAttribute('class').indexOf(fe.SCOPE_NAME))},Ge=$e=>{for(let Ze,Qe=0;Qe<$e.length;Qe++)if(Ze=$e[Qe],Ze.target!==document.documentElement&&Ze.target!==document.head){for(let et,Je=0;Je<Ze.addedNodes.length;Je++)if(et=Ze.addedNodes[Je],Ye(et)){let tt=et.getRootNode();if(tt.nodeType===Node.DOCUMENT_FRAGMENT_NODE){let st=tt.host;if(st){let rt=st.is||st.localName;fe.dom(et,rt)}}}for(let et,Je=0;Je<Ze.removedNodes.length;Je++)if(et=Ze.removedNodes[Je],et.nodeType===Node.ELEMENT_NODE){let tt;if(et.classList?tt=Array.from(et.classList):et.hasAttribute('class')&&(tt=et.getAttribute('class').split(/\s+/)),void 0!=tt){let st=tt.indexOf(fe.SCOPE_NAME);if(0<=st){let rt=tt[st+1];rt&&fe.dom(et,rt,!0)}}}}},qe=new MutationObserver(Ge),We=$e=>{qe.observe($e,{childList:!0,subtree:!0})},ze=window.customElements&&!window.customElements.flush;if(ze)We(document);else{let $e=()=>{We(document.body)};window.HTMLImports?window.HTMLImports.whenReady($e):requestAnimationFrame(function(){if('loading'===document.readyState){let Qe=function(){$e(),document.removeEventListener('readystatechange',Qe)};document.addEventListener('readystatechange',Qe)}else $e()})}Fe=function(){Ge(qe.takeRecords())}}let ke=new class{constructor(Ye=100){this.cache={},this.typeMax=Ye}_validate(Ye,Ge,qe){for(let ze,We=0;We<qe.length;We++)if(ze=qe[We],Ye.properties[ze]!==Ge[ze])return!1;return!0}store(Ye,Ge,qe,We){let ze=this.cache[Ye]||[];ze.push({properties:Ge,styleElement:qe,scopeSelector:We}),ze.length>this.typeMax&&ze.shift(),this.cache[Ye]=ze}fetch(Ye,Ge,qe){let We=this.cache[Ye];if(We)for(let $e,ze=We.length-1;0<=ze;ze--)if($e=We[ze],this._validate($e,Ge,qe))return $e}};class Ue{constructor(){this._scopeCounter={},this._documentOwner=document.documentElement,this._documentOwnerStyleInfo=ge.set(document.documentElement,new ge({rules:[]})),this._elementsHaveApplied=!1}get nativeShadow(){return G}get nativeCss(){return q}get nativeCssApply(){return!1}flush(){Fe()}_generateScopeSelector(Ye){let Ge=this._scopeCounter[Ye]=(this._scopeCounter[Ye]||0)+1;return`${Ye}-${Ge}`}getStyleAst(Ye){return N(Ye)}styleAstToString(Ye){return A(Ye)}_gatherStyles(Ye){let Ge=Ye.content.querySelectorAll('style'),qe=[];for(let ze,We=0;We<Ge.length;We++)ze=Ge[We],qe.push(ze.textContent),ze.parentNode.removeChild(ze);return qe.join('').trim()}_getCssBuild(Ye){let Ge=Ye.content.querySelector('style');return Ge?Ge.getAttribute('css-build')||'':''}prepareTemplate(Ye,Ge,qe){if(!Ye._prepared){Ye._prepared=!0,Ye.name=Ge,Ye.extends=qe,Se[Ge]=Ye;let We=this._getCssBuild(Ye),ze=this._gatherStyles(Ye),$e={is:Ge,extends:qe,__cssBuild:We};this.nativeShadow||fe.dom(Ye.content,Ge);let Qe=De.detectMixin(ze),Ze=e(ze);Qe&&this.nativeCss&&!this.nativeCssApply&&De.transformRules(Ze,Ge),Ye._styleAst=Ze;let Je=[];if(this.nativeCss||(Je=Ne.decorateStyles(Ye._styleAst,$e)),!Je.length||this.nativeCss){let et=this.nativeShadow?Ye.content:null,tt=Re[Ge],st=this._generateStaticStyle($e,Ye._styleAst,et,tt);Ye._style=st}Ye._ownPropertyNames=Je}}_generateStaticStyle(Ye,Ge,qe,We){let ze=fe.elementStyles(Ye,Ge);if(ze.length)return I(ze,Ye.is,qe,We)}_prepareHost(Ye){let qe,Ge=Ye.getAttribute('is')||Ye.localName;Ge!==Ye.localName&&(qe=Ye.localName);let $e,Qe,Ze,We=Re[Ge],ze=Se[Ge];return ze&&($e=ze._styleAst,Qe=ze._ownPropertyNames,Ze=ze._cssBuild),ge.set(Ye,new ge($e,We,Qe,Ge,qe,Ze))}applyStyle(Ye,Ge){let qe=Ye.getAttribute('is')||Ye.localName,We=ge.get(Ye),ze=!!We;if(We||(We=this._prepareHost(Ye)),this._isRootOwner(Ye)||(this._elementsHaveApplied=!0),window.CustomStyle){let $e=window.CustomStyle;if($e._documentDirty){if($e.findStyles(),this.nativeCss?!this.nativeCssApply&&$e._revalidateApplyShim():this._updateProperties(this._documentOwner,this._documentOwnerStyleInfo),$e.applyStyles(),!this._elementsHaveApplied)return;if(!this.nativeCss&&(this.updateStyles(),ze))return}}if(Ge&&(We.overrideStyleProperties=We.overrideStyleProperties||{},Object.assign(We.overrideStyleProperties,Ge)),this.nativeCss){We.overrideStyleProperties&&this._updateNativeProperties(Ye,We.overrideStyleProperties);let $e=Se[qe];if(!$e&&!this._isRootOwner(Ye))return;if($e&&$e._applyShimInvalid&&$e._style){if($e._validating||(De.transformRules($e._styleAst,qe),$e._style.textContent=fe.elementStyles(Ye,We.styleRules),ge.startValidating(qe)),this.nativeShadow){let Qe=Ye.shadowRoot;if(Qe){let Ze=Qe.querySelector('style');Ze.textContent=fe.elementStyles(Ye,We.styleRules)}}We.styleRules=$e._styleAst}}else this._updateProperties(Ye,We),We.ownStylePropertyNames&&We.ownStylePropertyNames.length&&this._applyStyleProperties(Ye,We);if(ze){let $e=this._isRootOwner(Ye)?Ye:Ye.shadowRoot;$e&&this._applyToDescendants($e)}}_applyToDescendants(Ye){let Ge=Ye.children||Ye.childNodes;for(let We,qe=0;qe<Ge.length;qe++)We=Ge[qe],We.shadowRoot&&this.applyStyle(We),this._applyToDescendants(We)}_styleOwnerForNode(Ye){let Ge=Ye.getRootNode(),qe=Ge.host;return qe?ge.get(qe)?qe:this._styleOwnerForNode(qe):this._documentOwner}_isRootOwner(Ye){return Ye===this._documentOwner}_applyStyleProperties(Ye,Ge){let qe=Ye.getAttribute('is')||Ye.localName,We=ke.fetch(qe,Ge.styleProperties,Ge.ownStylePropertyNames),ze=We&&We.scopeSelector,$e=We?We.styleElement:null,Qe=Ge.scopeSelector;Ge.scopeSelector=ze||this._generateScopeSelector(qe);let Ze=Ne.applyElementStyle(Ye,Ge.styleProperties,Ge.scopeSelector,$e);return this.nativeShadow||Ne.applyElementScopeSelector(Ye,Ge.scopeSelector,Qe),We||ke.store(qe,Ge.styleProperties,Ze,Ge.scopeSelector),Ze}_updateProperties(Ye,Ge){let qe=this._styleOwnerForNode(Ye),We=ge.get(qe),ze=We.styleProperties,$e=Object.create(ze||null),Qe=Ne.hostAndRootPropertiesForScope(Ye,Ge.styleRules),Ze=Ne.propertyDataFromStyles(We.styleRules,Ye),Je=Ze.properties;Object.assign($e,Qe.hostProps,Je,Qe.rootProps),this._mixinOverrideStyles($e,Ge.overrideStyleProperties),Ne.reify($e),Ge.styleProperties=$e}_mixinOverrideStyles(Ye,Ge){for(let qe in Ge){let We=Ge[qe];(We||0===We)&&(Ye[qe]=We)}}_updateNativeProperties(Ye,Ge){for(let qe in Ge)null===qe?Ye.style.removeProperty(qe):Ye.style.setProperty(qe,Ge[qe])}updateStyles(Ye){this.applyStyle(this._documentOwner,Ye)}_transformCustomStyleForDocument(Ye){let Ge=N(Ye);P(Ge,qe=>{G?fe.normalizeRootSelector(qe):fe.documentRule(qe),this.nativeCss&&!this.nativeCssApply&&De.transformRule(qe)}),this.nativeCss?Ye.textContent=A(Ge):this._documentOwnerStyleInfo.styleRules.rules.push(Ge)}_revalidateApplyShim(Ye){if(this.nativeCss&&!this.nativeCssApply){let Ge=N(Ye);De.transformRules(Ge),Ye.textContent=A(Ge)}}_applyCustomStyleToDocument(Ye){this.nativeCss||Ne.applyCustomStyle(Ye,this._documentOwnerStyleInfo.styleProperties)}getComputedStyleValue(Ye,Ge){let qe;if(!this.nativeCss){let We=ge.get(Ye)||ge.get(this._styleOwnerForNode(Ye));qe=We.styleProperties[Ge]}return qe=qe||window.getComputedStyle(Ye).getPropertyValue(Ge),qe.trim()}setElementClass(Ye,Ge){let qe=Ye.getRootNode(),We=Ge?Ge.split(/\s/):[],ze=qe.host&&qe.host.localName;if(!ze){var $e=Ye.getAttribute('class');if($e){let Qe=$e.split(/\s/);for(let Ze=0;Ze<Qe.length;Ze++)if(Qe[Ze]===fe.SCOPE_NAME){ze=Qe[Ze+1];break}}}if(ze&&We.push(fe.SCOPE_NAME,ze),!this.nativeCss){let Qe=ge.get(Ye);Qe&&Qe.scopeSelector&&We.push(Ne.XSCOPE_NAME,Qe.scopeSelector)}H(Ye,We.join(' '))}_styleInfoForNode(Ye){return ge.get(Ye)}}window.ShadyCSS=new Ue;let Ke=window.ShadyCSS,Xe=!1,Ve=[],je=null;class Be extends HTMLElement{static get _customStyles(){return Ve}static get processHook(){return je}static set processHook(Ye){je=Ye}static get _documentDirty(){return Xe}static findStyles(){for(let Ge,Ye=0;Ye<Ve.length;Ye++)if(Ge=Ve[Ye],!Ge._style){let qe=Ge.querySelector('style');if(!qe)continue;if(qe.__appliedElement)for(let ze,We=0;We<qe.attributes.length;We++)ze=qe.attributes[We],qe.__appliedElement.setAttribute(ze.name,ze.value);Ge._style=qe.__appliedElement||qe,je&&je(Ge._style),Ke._transformCustomStyleForDocument(Ge._style)}}static _revalidateApplyShim(){for(let Ge,Ye=0;Ye<Ve.length;Ye++)Ge=Ve[Ye],Ge._style&&Ke._revalidateApplyShim(Ge._style)}static applyStyles(){for(let Ge,Ye=0;Ye<Ve.length;Ye++)Ge=Ve[Ye],Ge._style&&Ke._applyCustomStyleToDocument(Ge._style);Xe=!1}constructor(){super(),Ve.push(this),F()}}window.CustomStyle=Be,window.customElements.define('custom-style',Be)})();
+*/
+
+/*
+Extremely simple css parser. Intended to be not more than what we need
+and definitely not necessarily correct =).
+*/
+
+// given a string of css, return a simple rule tree
+function parse(text) {
+  text = clean(text);
+  return parseCss(lex(text), text);
+}
+
+// remove stuff we don't care about that may hinder parsing
+function clean(cssText) {
+  return cssText.replace(RX.comments, '').replace(RX.port, '');
+}
+
+// super simple {...} lexer that returns a node tree
+function lex(text) {
+  let root = {
+    start: 0,
+    end: text.length
+  };
+  let n = root;
+  for (let i = 0, l = text.length; i < l; i++) {
+    if (text[i] === OPEN_BRACE) {
+      if (!n.rules) {
+        n.rules = [];
+      }
+      let p = n;
+      let previous = p.rules[p.rules.length - 1];
+      n = {
+        start: i + 1,
+        parent: p,
+        previous: previous
+      };
+      p.rules.push(n);
+    } else if (text[i] === CLOSE_BRACE) {
+      n.end = i + 1;
+      n = n.parent || root;
+    }
+  }
+  return root;
+}
+
+// add selectors/cssText to node tree
+function parseCss(node, text) {
+  let t = text.substring(node.start, node.end - 1);
+  node.parsedCssText = node.cssText = t.trim();
+  if (node.parent) {
+    let ss = node.previous ? node.previous.end : node.parent.start;
+    t = text.substring(ss, node.start - 1);
+    t = _expandUnicodeEscapes(t);
+    t = t.replace(RX.multipleSpaces, ' ');
+    // TODO(sorvell): ad hoc; make selector include only after last ;
+    // helps with mixin syntax
+    t = t.substring(t.lastIndexOf(';') + 1);
+    let s = node.parsedSelector = node.selector = t.trim();
+    node.atRule = (s.indexOf(AT_START) === 0);
+    // note, support a subset of rule types...
+    if (node.atRule) {
+      if (s.indexOf(MEDIA_START) === 0) {
+        node.type = types.MEDIA_RULE;
+      } else if (s.match(RX.keyframesRule)) {
+        node.type = types.KEYFRAMES_RULE;
+        node.keyframesName =
+          node.selector.split(RX.multipleSpaces).pop();
+      }
+    } else {
+      if (s.indexOf(VAR_START) === 0) {
+        node.type = types.MIXIN_RULE;
+      } else {
+        node.type = types.STYLE_RULE;
+      }
+    }
+  }
+  let r$ = node.rules;
+  if (r$) {
+    for (let i = 0, l = r$.length, r;
+      (i < l) && (r = r$[i]); i++) {
+      parseCss(r, text);
+    }
+  }
+  return node;
+}
+
+// conversion of sort unicode escapes with spaces like `\33 ` (and longer) into
+// expanded form that doesn't require trailing space `\000033`
+function _expandUnicodeEscapes(s) {
+  return s.replace(/\\([0-9a-f]{1,6})\s/gi, function() {
+    let code = arguments[1],
+      repeat = 6 - code.length;
+    while (repeat--) {
+      code = '0' + code;
+    }
+    return '\\' + code;
+  });
+}
+
+// stringify parsed css.
+function stringify(node, preserveProperties, text) {
+  text = text || '';
+  // calc rule cssText
+  let cssText = '';
+  if (node.cssText || node.rules) {
+    let r$ = node.rules;
+    if (r$ && !_hasMixinRules(r$)) {
+      for (let i = 0, l = r$.length, r;
+        (i < l) && (r = r$[i]); i++) {
+        cssText = stringify(r, preserveProperties, cssText);
+      }
+    } else {
+      cssText = preserveProperties ? node.cssText :
+        removeCustomProps(node.cssText);
+      cssText = cssText.trim();
+      if (cssText) {
+        cssText = '  ' + cssText + '\n';
+      }
+    }
+  }
+  // emit rule if there is cssText
+  if (cssText) {
+    if (node.selector) {
+      text += node.selector + ' ' + OPEN_BRACE + '\n';
+    }
+    text += cssText;
+    if (node.selector) {
+      text += CLOSE_BRACE + '\n\n';
+    }
+  }
+  return text;
+}
+
+function _hasMixinRules(rules) {
+  return rules[0].selector.indexOf(VAR_START) === 0;
+}
+
+function removeCustomProps(cssText) {
+  cssText = removeCustomPropAssignment(cssText);
+  return removeCustomPropApply(cssText);
+}
+
+function removeCustomPropAssignment(cssText) {
+  return cssText
+    .replace(RX.customProp, '')
+    .replace(RX.mixinProp, '');
+}
+
+function removeCustomPropApply(cssText) {
+  return cssText
+    .replace(RX.mixinApply, '')
+    .replace(RX.varApply, '');
+}
+
+let types = {
+  STYLE_RULE: 1,
+  KEYFRAMES_RULE: 7,
+  MEDIA_RULE: 4,
+  MIXIN_RULE: 1000
+};
+
+let OPEN_BRACE = '{';
+let CLOSE_BRACE = '}';
+
+// helper regexp's
+let RX = {
+  comments: /\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim,
+  port: /@import[^;]*;/gim,
+  customProp: /(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?(?:[;\n]|$)/gim,
+  mixinProp: /(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?{[^}]*?}(?:[;\n]|$)?/gim,
+  mixinApply: /@apply\s*\(?[^);]*\)?\s*(?:[;\n]|$)?/gim,
+  varApply: /[^;:]*?:[^;]*?var\([^;]*\)(?:[;\n]|$)?/gim,
+  keyframesRule: /^@[^\s]*keyframes/,
+  multipleSpaces: /\s+/g
+};
+
+let VAR_START = '--';
+let MEDIA_START = '@media';
+let AT_START = '@';
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+let nativeShadow = !(window.ShadyDOM && window.ShadyDOM.inUse);
+// chrome 49 has semi-working css vars, check if box-shadow works
+// safari 9.1 has a recalc bug: https://bugs.webkit.org/show_bug.cgi?id=155782
+let nativeCssVariables = (!navigator.userAgent.match('AppleWebKit/601') &&
+window.CSS && CSS.supports && CSS.supports('box-shadow', '0 0 0 var(--foo)'));
+
+// experimental support for native @apply
+function detectNativeApply() {
+  let style = document.createElement('style');
+  style.textContent = '.foo { @apply --foo }';
+  document.head.appendChild(style);
+  let nativeCssApply = (style.sheet.cssRules[0].cssText.indexOf('apply') >= 0);
+  document.head.removeChild(style);
+  return nativeCssApply;
+}
+
+let nativeCssApply = false && detectNativeApply();
+
+function parseSettings(settings) {
+  if (settings) {
+    nativeCssVariables = nativeCssVariables && !settings.shimcssproperties;
+    nativeShadow = nativeShadow && !settings.shimshadow;
+  }
+}
+
+if (window.ShadyCSS) {
+  parseSettings(window.ShadyCSS);
+} else if (window.WebComponents) {
+  parseSettings(window.WebComponents.flags);
+}
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+function toCssText (rules, callback) {
+  if (typeof rules === 'string') {
+    rules = parse(rules);
+  }
+  if (callback) {
+    forEachRule(rules, callback);
+  }
+  return stringify(rules, nativeCssVariables);
+}
+
+function rulesForStyle(style) {
+  if (!style.__cssRules && style.textContent) {
+    style.__cssRules = parse(style.textContent);
+  }
+  return style.__cssRules;
+}
+
+// Tests if a rule is a keyframes selector, which looks almost exactly
+// like a normal selector but is not (it has nothing to do with scoping
+// for example).
+function isKeyframesSelector(rule) {
+  return rule.parent &&
+  rule.parent.type === types.KEYFRAMES_RULE;
+}
+
+function forEachRule(node, styleRuleCallback, keyframesRuleCallback, onlyActiveRules) {
+  if (!node) {
+    return;
+  }
+  let skipRules = false;
+  if (onlyActiveRules) {
+    if (node.type === types.MEDIA_RULE) {
+      let matchMedia = node.selector.match(rx.MEDIA_MATCH);
+      if (matchMedia) {
+        // if rule is a non matching @media rule, skip subrules
+        if (!window.matchMedia(matchMedia[1]).matches) {
+          skipRules = true;
+        }
+      }
+    }
+  }
+  if (node.type === types.STYLE_RULE) {
+    styleRuleCallback(node);
+  } else if (keyframesRuleCallback &&
+    node.type === types.KEYFRAMES_RULE) {
+    keyframesRuleCallback(node);
+  } else if (node.type === types.MIXIN_RULE) {
+    skipRules = true;
+  }
+  let r$ = node.rules;
+  if (r$ && !skipRules) {
+    for (let i=0, l=r$.length, r; (i<l) && (r=r$[i]); i++) {
+      forEachRule(r, styleRuleCallback, keyframesRuleCallback, onlyActiveRules);
+    }
+  }
+}
+
+// add a string of cssText to the document.
+function applyCss(cssText, moniker, target, contextNode) {
+  let style = createScopeStyle(cssText, moniker);
+  return applyStyle(style, target, contextNode);
+}
+
+function applyStyle(style, target, contextNode) {
+  target = target || document.head;
+  let after = (contextNode && contextNode.nextSibling) ||
+  target.firstChild;
+  lastHeadApplyNode = style;
+  return target.insertBefore(style, after);
+}
+
+function createScopeStyle(cssText, moniker) {
+  let style = document.createElement('style');
+  if (moniker) {
+    style.setAttribute('scope', moniker);
+  }
+  style.textContent = cssText;
+  return style;
+}
+
+let lastHeadApplyNode = null;
+
+// insert a comment node as a styling position placeholder.
+function applyStylePlaceHolder(moniker) {
+  let placeHolder = document.createComment(' Shady DOM styles for ' +
+    moniker + ' ');
+  let after = lastHeadApplyNode ?
+    lastHeadApplyNode.nextSibling : null;
+  let scope = document.head;
+  scope.insertBefore(placeHolder, after || scope.firstChild);
+  lastHeadApplyNode = placeHolder;
+  return placeHolder;
+}
+
+
+
+// cssBuildTypeForModule: function (module) {
+//   let dm = Polymer.DomModule.import(module);
+//   if (dm) {
+//     return getCssBuildType(dm);
+//   }
+// },
+//
+
+
+// Walk from text[start] matching parens
+// returns position of the outer end paren
+function findMatchingParen(text, start) {
+  let level = 0;
+  for (let i=start, l=text.length; i < l; i++) {
+    if (text[i] === '(') {
+      level++;
+    } else if (text[i] === ')') {
+      if (--level === 0) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+
+function processVariableAndFallback(str, callback) {
+  // find 'var('
+  let start = str.indexOf('var(');
+  if (start === -1) {
+    // no var?, everything is prefix
+    return callback(str, '', '', '');
+  }
+  //${prefix}var(${inner})${suffix}
+  let end = findMatchingParen(str, start + 3);
+  let inner = str.substring(start + 4, end);
+  let prefix = str.substring(0, start);
+  // suffix may have other variables
+  let suffix = processVariableAndFallback(str.substring(end + 1), callback);
+  let comma = inner.indexOf(',');
+  // value and fallback args should be trimmed to match in property lookup
+  if (comma === -1) {
+    // variable, no fallback
+    return callback(prefix, inner.trim(), '', suffix);
+  }
+  // var(${value},${fallback})
+  let value = inner.substring(0, comma).trim();
+  let fallback = inner.substring(comma + 1).trim();
+  return callback(prefix, value, fallback, suffix);
+}
+
+function setElementClassRaw(element, value) {
+  // use native setAttribute provided by ShadyDOM when setAttribute is patched
+  if (window.ShadyDOM) {
+    window.ShadyDOM.nativeMethods.setAttribute.call(element, 'class', value);
+  } else {
+    element.setAttribute('class', value);
+  }
+}
+
+let rx = {
+  VAR_ASSIGN: /(?:^|[;\s{]\s*)(--[\w-]*?)\s*:\s*(?:([^;{]*)|{([^}]*)})(?:(?=[;\s}])|$)/gi,
+  MIXIN_MATCH: /(?:^|\W+)@apply\s*\(?([^);\n]*)\)?/gi,
+  VAR_CONSUMED: /(--[\w-]+)\s*([:,;)]|$)/gi,
+  ANIMATION_MATCH: /(animation\s*:)|(animation-name\s*:)/,
+  MEDIA_MATCH: /@media[^(]*(\([^)]*\))/,
+  IS_VAR: /^--/,
+  BRACKETED: /\{[^}]*\}/g,
+  HOST_PREFIX: '(?:^|[^.#[:])',
+  HOST_SUFFIX: '($|[.:[\\s>+~])'
+};
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/* Transforms ShadowDOM styling into ShadyDOM styling
+
+* scoping:
+
+  * elements in scope get scoping selector class="x-foo-scope"
+  * selectors re-written as follows:
+
+    div button -> div.x-foo-scope button.x-foo-scope
+
+* :host -> scopeName
+
+* :host(...) -> scopeName...
+
+* ::slotted(...) -> scopeName > ...
+
+* ...:dir(ltr|rtl) -> [dir="ltr|rtl"] ..., ...[dir="ltr|rtl"]
+
+* :host(:dir[rtl]) -> scopeName:dir(rtl) -> [dir="rtl"] scopeName, scopeName[dir="rtl"]
+
+*/
+const SCOPE_NAME = 'style-scope';
+
+class StyleTransformer {
+  get SCOPE_NAME() {
+    return SCOPE_NAME;
+  }
+  // Given a node and scope name, add a scoping class to each node
+  // in the tree. This facilitates transforming css into scoped rules.
+  dom(node, scope, shouldRemoveScope) {
+    // one time optimization to skip scoping...
+    if (node.__styleScoped) {
+      node.__styleScoped = null;
+    } else {
+      this._transformDom(node, scope || '', shouldRemoveScope);
+    }
+  }
+
+  _transformDom(node, selector, shouldRemoveScope) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      this.element(node, selector, shouldRemoveScope);
+    }
+    let c$ = (node.localName === 'template') ?
+      (node.content || node._content).childNodes :
+      node.children || node.childNodes;
+    if (c$) {
+      for (let i=0; i<c$.length; i++) {
+        this._transformDom(c$[i], selector, shouldRemoveScope);
+      }
+    }
+  }
+
+  element(element, scope, shouldRemoveScope) {
+    // note: if using classes, we add both the general 'style-scope' class
+    // as well as the specific scope. This enables easy filtering of all
+    // `style-scope` elements
+    if (scope) {
+      // note: svg on IE does not have classList so fallback to class
+      if (element.classList) {
+        if (shouldRemoveScope) {
+          element.classList.remove(SCOPE_NAME);
+          element.classList.remove(scope);
+        } else {
+          element.classList.add(SCOPE_NAME);
+          element.classList.add(scope);
+        }
+      } else if (element.getAttribute) {
+        let c = element.getAttribute(CLASS);
+        if (shouldRemoveScope) {
+          if (c) {
+            let newValue = c.replace(SCOPE_NAME, '').replace(scope, '');
+            setElementClassRaw(element, newValue);
+          }
+        } else {
+          let newValue = (c ? c + ' ' : '') + SCOPE_NAME + ' ' + scope;
+          setElementClassRaw(element, newValue);
+        }
+      }
+    }
+  }
+
+  elementStyles(element, styleRules, callback) {
+    let cssBuildType = element.__cssBuild;
+    // no need to shim selectors if settings.useNativeShadow, also
+    // a shady css build will already have transformed selectors
+    // NOTE: This method may be called as part of static or property shimming.
+    // When there is a targeted build it will not be called for static shimming,
+    // but when the property shim is used it is called and should opt out of
+    // static shimming work when a proper build exists.
+    let cssText = (nativeShadow || cssBuildType === 'shady') ?
+    toCssText(styleRules, callback) :
+    this.css(styleRules, element.is, element.extends, callback) + '\n\n';
+    return cssText.trim();
+  }
+
+  // Given a string of cssText and a scoping string (scope), returns
+  // a string of scoped css where each selector is transformed to include
+  // a class created from the scope. ShadowDOM selectors are also transformed
+  // (e.g. :host) to use the scoping selector.
+  css(rules, scope, ext, callback) {
+    let hostScope = this._calcHostScope(scope, ext);
+    scope = this._calcElementScope(scope);
+    let self = this;
+    return toCssText(rules, function(rule) {
+      if (!rule.isScoped) {
+        self.rule(rule, scope, hostScope);
+        rule.isScoped = true;
+      }
+      if (callback) {
+        callback(rule, scope, hostScope);
+      }
+    });
+  }
+
+  _calcElementScope(scope) {
+    if (scope) {
+      return CSS_CLASS_PREFIX + scope;
+    } else {
+      return '';
+    }
+  }
+
+  _calcHostScope(scope, ext) {
+    return ext ? '[is=' +  scope + ']' : scope;
+  }
+
+  rule(rule, scope, hostScope) {
+    this._transformRule(rule, this._transformComplexSelector,
+      scope, hostScope);
+  }
+
+  // transforms a css rule to a scoped rule.
+  _transformRule(rule, transformer, scope, hostScope) {
+    // NOTE: save transformedSelector for subsequent matching of elements
+    // against selectors (e.g. when calculating style properties)
+    rule.selector = rule.transformedSelector =
+      this._transformRuleCss(rule, transformer, scope, hostScope);
+  }
+
+  _transformRuleCss(rule, transformer, scope, hostScope) {
+    let p$ = rule.selector.split(COMPLEX_SELECTOR_SEP);
+    // we want to skip transformation of rules that appear in keyframes,
+    // because they are keyframe selectors, not element selectors.
+    if (!isKeyframesSelector(rule)) {
+      for (let i=0, l=p$.length, p; (i<l) && (p=p$[i]); i++) {
+        p$[i] = transformer.call(this, p, scope, hostScope);
+      }
+    }
+    return p$.join(COMPLEX_SELECTOR_SEP);
+  }
+
+  _transformComplexSelector(selector, scope, hostScope) {
+    let stop = false;
+    selector = selector.trim();
+    // Remove spaces inside of selectors like `:nth-of-type` because it confuses SIMPLE_SELECTOR_SEP
+    selector = selector.replace(NTH, (m, type, inner) => `:${type}(${inner.replace(/\s/g, '')})`);
+    selector = selector.replace(SLOTTED_START, `${HOST} $1`);
+    selector = selector.replace(SIMPLE_SELECTOR_SEP, (m, c, s) => {
+      if (!stop) {
+        let info = this._transformCompoundSelector(s, c, scope, hostScope);
+        stop = stop || info.stop;
+        c = info.combinator;
+        s = info.value;
+      }
+      return c + s;
+    });
+    return selector;
+  }
+
+  _transformCompoundSelector(selector, combinator, scope, hostScope) {
+    // replace :host with host scoping class
+    let slottedIndex = selector.indexOf(SLOTTED);
+    if (selector.indexOf(HOST) >= 0) {
+      selector = this._transformHostSelector(selector, hostScope);
+    // replace other selectors with scoping class
+    } else if (slottedIndex !== 0) {
+      selector = scope ? this._transformSimpleSelector(selector, scope) :
+        selector;
+    }
+    // mark ::slotted() scope jump to replace with descendant selector + arg
+    // also ignore left-side combinator
+    let slotted = false;
+    if (slottedIndex >= 0) {
+      combinator = '';
+      slotted = true;
+    }
+    // process scope jumping selectors up to the scope jump and then stop
+    let stop;
+    if (slotted) {
+      stop = true;
+      if (slotted) {
+        // .zonk ::slotted(.foo) -> .zonk.scope > .foo
+        selector = selector.replace(SLOTTED_PAREN, (m, paren) => ` > ${paren}`);
+      }
+    }
+    selector = selector.replace(DIR_PAREN, (m, before, dir) =>
+      `[dir="${dir}"] ${before}, ${before}[dir="${dir}"]`);
+    return {value: selector, combinator, stop};
+  }
+
+  _transformSimpleSelector(selector, scope) {
+    let p$ = selector.split(PSEUDO_PREFIX);
+    p$[0] += scope;
+    return p$.join(PSEUDO_PREFIX);
+  }
+
+  // :host(...) -> scopeName...
+  _transformHostSelector(selector, hostScope) {
+    let m = selector.match(HOST_PAREN);
+    let paren = m && m[2].trim() || '';
+    if (paren) {
+      if (!paren[0].match(SIMPLE_SELECTOR_PREFIX)) {
+        // paren starts with a type selector
+        let typeSelector = paren.split(SIMPLE_SELECTOR_PREFIX)[0];
+        // if the type selector is our hostScope then avoid pre-pending it
+        if (typeSelector === hostScope) {
+          return paren;
+        // otherwise, this selector should not match in this scope so
+        // output a bogus selector.
+        } else {
+          return SELECTOR_NO_MATCH;
+        }
+      } else {
+        // make sure to do a replace here to catch selectors like:
+        // `:host(.foo)::before`
+        return selector.replace(HOST_PAREN, function(m, host, paren) {
+          return hostScope + paren;
+        });
+      }
+    // if no paren, do a straight :host replacement.
+    // TODO(sorvell): this should not strictly be necessary but
+    // it's needed to maintain support for `:host[foo]` type selectors
+    // which have been improperly used under Shady DOM. This should be
+    // deprecated.
+    } else {
+      return selector.replace(HOST, hostScope);
+    }
+  }
+
+  documentRule(rule) {
+    // reset selector in case this is redone.
+    rule.selector = rule.parsedSelector;
+    this.normalizeRootSelector(rule);
+    this._transformRule(rule, this._transformDocumentSelector);
+  }
+
+  normalizeRootSelector(rule) {
+    if (rule.selector === ROOT) {
+      rule.selector = 'html';
+    }
+  }
+
+  _transformDocumentSelector(selector) {
+    return selector.match(SLOTTED) ?
+      this._transformComplexSelector(selector, SCOPE_DOC_SELECTOR) :
+      this._transformSimpleSelector(selector.trim(), SCOPE_DOC_SELECTOR);
+  }
+}
+
+let NTH = /:(nth[-\w]+)\(([^)]+)\)/;
+let SCOPE_DOC_SELECTOR = `:not(.${SCOPE_NAME})`;
+let COMPLEX_SELECTOR_SEP = ',';
+let SIMPLE_SELECTOR_SEP = /(^|[\s>+~]+)((?:\[.+?\]|[^\s>+~=\[])+)/g;
+let SIMPLE_SELECTOR_PREFIX = /[[.:#*]/;
+let HOST = ':host';
+let ROOT = ':root';
+let SLOTTED = '::slotted';
+let SLOTTED_START = new RegExp(`^(${SLOTTED})`);
+// NOTE: this supports 1 nested () pair for things like
+// :host(:not([selected]), more general support requires
+// parsing which seems like overkill
+let HOST_PAREN = /(:host)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/;
+// similar to HOST_PAREN
+let SLOTTED_PAREN = /(?:::slotted)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/;
+let DIR_PAREN = /(.*):dir\((?:(ltr|rtl))\)/;
+let CSS_CLASS_PREFIX = '.';
+let PSEUDO_PREFIX = ':';
+let CLASS = 'class';
+let SELECTOR_NO_MATCH = 'should_not_match';
+
+var StyleTransformer$1 = new StyleTransformer();
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+var templateMap = {};
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+const promise = Promise.resolve();
+
+class StyleInfo {
+  static get(node) {
+    return node.__styleInfo;
+  }
+  static set(node, styleInfo) {
+    node.__styleInfo = styleInfo;
+    return styleInfo;
+  }
+  static invalidate(elementName) {
+    if (templateMap[elementName]) {
+      templateMap[elementName]._applyShimInvalid = true;
+    }
+  }
+  /*
+  the template is marked as `validating` for one microtask so that all instances
+  found in the tree crawl of `applyStyle` will update themselves,
+  but the template will only be updated once.
+  */
+  static startValidating(elementName) {
+    const template = templateMap[elementName];
+    if (!template._validating) {
+      template._validating = true;
+      promise.then(() => {
+        template._applyShimInvalid = false;
+        template._validating = false;
+      });
+    }
+  }
+  constructor(ast, placeholder, ownStylePropertyNames, elementName, typeExtension, cssBuild) {
+    this.styleRules = ast || null;
+    this.placeholder = placeholder || null;
+    this.ownStylePropertyNames = ownStylePropertyNames || [];
+    this.overrideStyleProperties = null;
+    this.elementName = elementName || '';
+    this.cssBuild = cssBuild || '';
+    this.typeExtension = typeExtension || '';
+    this.styleProperties = null;
+    this.scopeSelector = null;
+    this.customStyle = null;
+  }
+}
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+// TODO: dedupe with shady
+const p = window.Element.prototype;
+const matchesSelector = p.matches || p.matchesSelector ||
+  p.mozMatchesSelector || p.msMatchesSelector ||
+  p.oMatchesSelector || p.webkitMatchesSelector;
+
+const IS_IE = navigator.userAgent.match('Trident');
+
+const XSCOPE_NAME = 'x-scope';
+
+class StyleProperties {
+  get XSCOPE_NAME() {
+    return XSCOPE_NAME;
+  }
+  // decorates styles with rule info and returns an array of used style
+  // property names
+  decorateStyles(rules) {
+    let self = this, props = {}, keyframes = [], ruleIndex = 0;
+    forEachRule(rules, function(rule) {
+      self.decorateRule(rule);
+      // mark in-order position of ast rule in styles block, used for cache key
+      rule.index = ruleIndex++;
+      self.collectPropertiesInCssText(rule.propertyInfo.cssText, props);
+    }, function onKeyframesRule(rule) {
+      keyframes.push(rule);
+    });
+    // Cache all found keyframes rules for later reference:
+    rules._keyframes = keyframes;
+    // return this list of property names *consumes* in these styles.
+    let names = [];
+    for (let i in props) {
+      names.push(i);
+    }
+    return names;
+  }
+
+  // decorate a single rule with property info
+  decorateRule(rule) {
+    if (rule.propertyInfo) {
+      return rule.propertyInfo;
+    }
+    let info = {}, properties = {};
+    let hasProperties = this.collectProperties(rule, properties);
+    if (hasProperties) {
+      info.properties = properties;
+      // TODO(sorvell): workaround parser seeing mixins as additional rules
+      rule.rules = null;
+    }
+    info.cssText = this.collectCssText(rule);
+    rule.propertyInfo = info;
+    return info;
+  }
+
+  // collects the custom properties from a rule's cssText
+  collectProperties(rule, properties) {
+    let info = rule.propertyInfo;
+    if (info) {
+      if (info.properties) {
+        Object.assign(properties, info.properties);
+        return true;
+      }
+    } else {
+      let m, rx$$1 = rx.VAR_ASSIGN;
+      let cssText = rule.parsedCssText;
+      let value;
+      let any;
+      while ((m = rx$$1.exec(cssText))) {
+        // note: group 2 is var, 3 is mixin
+        value = (m[2] || m[3]).trim();
+        // value of 'inherit' or 'unset' is equivalent to not setting the property here
+        if (value !== 'inherit' || value !== 'unset') {
+          properties[m[1].trim()] = value;
+        }
+        any = true;
+      }
+      return any;
+    }
+
+  }
+
+  // returns cssText of properties that consume variables/mixins
+  collectCssText(rule) {
+    return this.collectConsumingCssText(rule.parsedCssText);
+  }
+
+  // NOTE: we support consumption inside mixin assignment
+  // but not production, so strip out {...}
+  collectConsumingCssText(cssText) {
+    return cssText.replace(rx.BRACKETED, '')
+      .replace(rx.VAR_ASSIGN, '');
+  }
+
+  collectPropertiesInCssText(cssText, props) {
+    let m;
+    while ((m = rx.VAR_CONSUMED.exec(cssText))) {
+      let name = m[1];
+      // This regex catches all variable names, and following non-whitespace char
+      // If next char is not ':', then variable is a consumer
+      if (m[2] !== ':') {
+        props[name] = true;
+      }
+    }
+  }
+
+  // turns custom properties into realized values.
+  reify(props) {
+    // big perf optimization here: reify only *own* properties
+    // since this object has __proto__ of the element's scope properties
+    let names = Object.getOwnPropertyNames(props);
+    for (let i=0, n; i < names.length; i++) {
+      n = names[i];
+      props[n] = this.valueForProperty(props[n], props);
+    }
+  }
+
+  // given a property value, returns the reified value
+  // a property value may be:
+  // (1) a literal value like: red or 5px;
+  // (2) a variable value like: var(--a), var(--a, red), or var(--a, --b) or
+  // var(--a, var(--b));
+  // (3) a literal mixin value like { properties }. Each of these properties
+  // can have values that are: (a) literal, (b) variables, (c) @apply mixins.
+  valueForProperty(property, props) {
+    // case (1) default
+    // case (3) defines a mixin and we have to reify the internals
+    if (property) {
+      if (property.indexOf(';') >=0) {
+        property = this.valueForProperties(property, props);
+      } else {
+        // case (2) variable
+        let self = this;
+        let fn = function(prefix, value, fallback, suffix) {
+          if (!value) {
+            return prefix + suffix;
+          }
+          let propertyValue = self.valueForProperty(props[value], props);
+          // if value is "initial", then the variable should be treated as unset
+          if (!propertyValue || propertyValue === 'initial') {
+            // fallback may be --a or var(--a) or literal
+            propertyValue = self.valueForProperty(props[fallback] || fallback, props) ||
+            fallback;
+          } else if (propertyValue === 'apply-shim-inherit') {
+            // CSS build will replace `inherit` with `apply-shim-inherit`
+            // for use with native css variables.
+            // Since we have full control, we can use `inherit` directly.
+            propertyValue = 'inherit';
+          }
+          return prefix + (propertyValue || '') + suffix;
+        };
+        property = processVariableAndFallback(property, fn);
+      }
+    }
+    return property && property.trim() || '';
+  }
+
+  // note: we do not yet support mixin within mixin
+  valueForProperties(property, props) {
+    let parts = property.split(';');
+    for (let i=0, p, m; i<parts.length; i++) {
+      if ((p = parts[i])) {
+        rx.MIXIN_MATCH.lastIndex = 0;
+        m = rx.MIXIN_MATCH.exec(p);
+        if (m) {
+          p = this.valueForProperty(props[m[1]], props);
+        } else {
+          let colon = p.indexOf(':');
+          if (colon !== -1) {
+            let pp = p.substring(colon);
+            pp = pp.trim();
+            pp = this.valueForProperty(pp, props) || pp;
+            p = p.substring(0, colon) + pp;
+          }
+        }
+        parts[i] = (p && p.lastIndexOf(';') === p.length - 1) ?
+          // strip trailing ;
+          p.slice(0, -1) :
+          p || '';
+      }
+    }
+    return parts.join(';');
+  }
+
+  applyProperties(rule, props) {
+    let output = '';
+    // dynamically added sheets may not be decorated so ensure they are.
+    if (!rule.propertyInfo) {
+      this.decorateRule(rule);
+    }
+    if (rule.propertyInfo.cssText) {
+      output = this.valueForProperties(rule.propertyInfo.cssText, props);
+    }
+    rule.cssText = output;
+  }
+
+  // Apply keyframe transformations to the cssText of a given rule. The
+  // keyframeTransforms object is a map of keyframe names to transformer
+  // functions which take in cssText and spit out transformed cssText.
+  applyKeyframeTransforms(rule, keyframeTransforms) {
+    let input = rule.cssText;
+    let output = rule.cssText;
+    if (rule.hasAnimations == null) {
+      // Cache whether or not the rule has any animations to begin with:
+      rule.hasAnimations = rx.ANIMATION_MATCH.test(input);
+    }
+    // If there are no animations referenced, we can skip transforms:
+    if (rule.hasAnimations) {
+      let transform;
+      // If we haven't transformed this rule before, we iterate over all
+      // transforms:
+      if (rule.keyframeNamesToTransform == null) {
+        rule.keyframeNamesToTransform = [];
+        for (let keyframe in keyframeTransforms) {
+          transform = keyframeTransforms[keyframe];
+          output = transform(input);
+          // If the transform actually changed the CSS text, we cache the
+          // transform name for future use:
+          if (input !== output) {
+            input = output;
+            rule.keyframeNamesToTransform.push(keyframe);
+          }
+        }
+      } else {
+        // If we already have a list of keyframe names that apply to this
+        // rule, we apply only those keyframe name transforms:
+        for (let i = 0; i < rule.keyframeNamesToTransform.length; ++i) {
+          transform = keyframeTransforms[rule.keyframeNamesToTransform[i]];
+          input = transform(input);
+        }
+        output = input;
+      }
+    }
+    rule.cssText = output;
+  }
+
+  // Test if the rules in these styles matches the given `element` and if so,
+  // collect any custom properties into `props`.
+  propertyDataFromStyles(rules, element) {
+    let props = {}, self = this;
+    // generates a unique key for these matches
+    let o = [];
+    // note: active rules excludes non-matching @media rules
+    forEachRule(rules, function(rule) {
+      // TODO(sorvell): we could trim the set of rules at declaration
+      // time to only include ones that have properties
+      if (!rule.propertyInfo) {
+        self.decorateRule(rule);
+      }
+      // match element against transformedSelector: selector may contain
+      // unwanted uniquification and parsedSelector does not directly match
+      // for :host selectors.
+      let selectorToMatch = rule.transformedSelector || rule.parsedSelector;
+      if (element && rule.propertyInfo.properties && selectorToMatch) {
+        if (matchesSelector.call(element, selectorToMatch)) {
+          self.collectProperties(rule, props);
+          // produce numeric key for these matches for lookup
+          addToBitMask(rule.index, o);
+        }
+      }
+    }, null, true);
+    return {properties: props, key: o};
+  }
+
+  whenHostOrRootRule(scope, rule, cssBuild, callback) {
+    if (!rule.propertyInfo) {
+      this.decorateRule(rule);
+    }
+    if (!rule.propertyInfo.properties) {
+      return;
+    }
+    let hostScope = scope.is ?
+    StyleTransformer$1._calcHostScope(scope.is, scope.extends) :
+    'html';
+    let parsedSelector = rule.parsedSelector;
+    let isRoot = (parsedSelector === ':host > *' || parsedSelector === 'html');
+    let isHost = parsedSelector.indexOf(':host') === 0 && !isRoot;
+    // build info is either in scope (when scope is an element) or in the style
+    // when scope is the default scope; note: this allows default scope to have
+    // mixed mode built and unbuilt styles.
+    if (cssBuild === 'shady') {
+      // :root -> x-foo > *.x-foo for elements and html for custom-style
+      isRoot = parsedSelector === (hostScope + ' > *.' + hostScope) || parsedSelector.indexOf('html') !== -1;
+      // :host -> x-foo for elements, but sub-rules have .x-foo in them
+      isHost = !isRoot && parsedSelector.indexOf(hostScope) === 0;
+    }
+    if (cssBuild === 'shadow') {
+      isRoot = parsedSelector === ':host > *' || parsedSelector === 'html';
+      isHost = isHost && !isRoot;
+    }
+    if (!isRoot && !isHost) {
+      return;
+    }
+    let selectorToMatch = hostScope;
+    if (isHost) {
+      // need to transform :host under ShadowDOM because `:host` does not work with `matches`
+      if (nativeShadow && !rule.transformedSelector) {
+        // transform :host into a matchable selector
+        rule.transformedSelector =
+        StyleTransformer$1._transformRuleCss(
+          rule,
+          StyleTransformer$1._transformComplexSelector,
+          StyleTransformer$1._calcElementScope(scope.is),
+          hostScope
+        );
+      }
+      selectorToMatch = rule.transformedSelector || hostScope;
+    }
+    callback({
+      selector: selectorToMatch,
+      isHost: isHost,
+      isRoot: isRoot
+    });
+  }
+
+  hostAndRootPropertiesForScope(scope, rules) {
+    let hostProps = {}, rootProps = {}, self = this;
+    // note: active rules excludes non-matching @media rules
+    let cssBuild = rules && rules.__cssBuild;
+    forEachRule(rules, function(rule) {
+      // if scope is StyleDefaults, use _element for matchesSelector
+      self.whenHostOrRootRule(scope, rule, cssBuild, function(info) {
+        let element = scope._element || scope;
+        if (matchesSelector.call(element, info.selector)) {
+          if (info.isHost) {
+            self.collectProperties(rule, hostProps);
+          } else {
+            self.collectProperties(rule, rootProps);
+          }
+        }
+      });
+    }, null, true);
+    return {rootProps: rootProps, hostProps: hostProps};
+  }
+
+  transformStyles(element, properties, scopeSelector) {
+    let self = this;
+    let hostSelector = StyleTransformer$1
+      ._calcHostScope(element.is, element.extends);
+    let rxHostSelector = element.extends ?
+      '\\' + hostSelector.slice(0, -1) + '\\]' :
+      hostSelector;
+    let hostRx = new RegExp(rx.HOST_PREFIX + rxHostSelector +
+      rx.HOST_SUFFIX);
+    let rules = StyleInfo.get(element).styleRules;
+    let keyframeTransforms =
+      this._elementKeyframeTransforms(element, rules, scopeSelector);
+    return StyleTransformer$1.elementStyles(element, rules, function(rule) {
+      self.applyProperties(rule, properties);
+      if (!nativeShadow &&
+          !isKeyframesSelector(rule) &&
+          rule.cssText) {
+        // NOTE: keyframe transforms only scope munge animation names, so it
+        // is not necessary to apply them in ShadowDOM.
+        self.applyKeyframeTransforms(rule, keyframeTransforms);
+        self._scopeSelector(rule, hostRx, hostSelector, scopeSelector);
+      }
+    });
+  }
+
+  _elementKeyframeTransforms(element, rules, scopeSelector) {
+    let keyframesRules = rules._keyframes;
+    let keyframeTransforms = {};
+    if (!nativeShadow && keyframesRules) {
+      // For non-ShadowDOM, we transform all known keyframes rules in
+      // advance for the current scope. This allows us to catch keyframes
+      // rules that appear anywhere in the stylesheet:
+      for (let i = 0, keyframesRule = keyframesRules[i];
+           i < keyframesRules.length;
+           keyframesRule = keyframesRules[++i]) {
+        this._scopeKeyframes(keyframesRule, scopeSelector);
+        keyframeTransforms[keyframesRule.keyframesName] =
+            this._keyframesRuleTransformer(keyframesRule);
+      }
+    }
+    return keyframeTransforms;
+  }
+
+  // Generate a factory for transforming a chunk of CSS text to handle a
+  // particular scoped keyframes rule.
+  _keyframesRuleTransformer(keyframesRule) {
+    return function(cssText) {
+      return cssText.replace(
+          keyframesRule.keyframesNameRx,
+          keyframesRule.transformedKeyframesName);
+    };
+  }
+
+  // Transforms `@keyframes` names to be unique for the current host.
+  // Example: @keyframes foo-anim -> @keyframes foo-anim-x-foo-0
+  _scopeKeyframes(rule, scopeId) {
+    rule.keyframesNameRx = new RegExp(rule.keyframesName, 'g');
+    rule.transformedKeyframesName = rule.keyframesName + '-' + scopeId;
+    rule.transformedSelector = rule.transformedSelector || rule.selector;
+    rule.selector = rule.transformedSelector.replace(
+        rule.keyframesName, rule.transformedKeyframesName);
+  }
+
+  // Strategy: x scope shim a selector e.g. to scope `.x-foo-42` (via classes):
+  // non-host selector: .a.x-foo -> .x-foo-42 .a.x-foo
+  // host selector: x-foo.wide -> .x-foo-42.wide
+  // note: we use only the scope class (.x-foo-42) and not the hostSelector
+  // (x-foo) to scope :host rules; this helps make property host rules
+  // have low specificity. They are overrideable by class selectors but,
+  // unfortunately, not by type selectors (e.g. overriding via
+  // `.special` is ok, but not by `x-foo`).
+  _scopeSelector(rule, hostRx, hostSelector, scopeId) {
+    rule.transformedSelector = rule.transformedSelector || rule.selector;
+    let selector = rule.transformedSelector;
+    let scope = '.' + scopeId;
+    let parts = selector.split(',');
+    for (let i=0, l=parts.length, p; (i<l) && (p=parts[i]); i++) {
+      parts[i] = p.match(hostRx) ?
+        p.replace(hostSelector, scope) :
+        scope + ' ' + p;
+    }
+    rule.selector = parts.join(',');
+  }
+
+  applyElementScopeSelector(element, selector, old) {
+    let c = element.getAttribute('class') || '';
+    let v = c;
+    if (old) {
+      v = c.replace(
+        new RegExp('\\s*' + XSCOPE_NAME + '\\s*' + old + '\\s*', 'g'), ' ');
+    }
+    v += (v ? ' ' : '') + XSCOPE_NAME + ' ' + selector;
+    if (c !== v) {
+      setElementClassRaw(element, v);
+    }
+  }
+
+  applyElementStyle(element, properties, selector, style) {
+    // calculate cssText to apply
+    let cssText = style ? style.textContent || '' :
+      this.transformStyles(element, properties, selector);
+    // if shady and we have a cached style that is not style, decrement
+    let styleInfo = StyleInfo.get(element);
+    let s = styleInfo.customStyle;
+    if (s && !nativeShadow && (s !== style)) {
+      s._useCount--;
+      if (s._useCount <= 0 && s.parentNode) {
+        s.parentNode.removeChild(s);
+      }
+    }
+    // apply styling always under native or if we generated style
+    // or the cached style is not in document(!)
+    if (nativeShadow) {
+      // update existing style only under native
+      if (styleInfo.customStyle) {
+        styleInfo.customStyle.textContent = cssText;
+        style = styleInfo.customStyle;
+      // otherwise, if we have css to apply, do so
+      } else if (cssText) {
+        // apply css after the scope style of the element to help with
+        // style precedence rules.
+        style = applyCss(cssText, selector, element.shadowRoot,
+          styleInfo.placeholder);
+      }
+    } else {
+      // shady and no cache hit
+      if (!style) {
+        // apply css after the scope style of the element to help with
+        // style precedence rules.
+        if (cssText) {
+          style = applyCss(cssText, selector, null,
+            styleInfo.placeholder);
+        }
+      // shady and cache hit but not in document
+      } else if (!style.parentNode) {
+        applyStyle(style, null, styleInfo.placeholder);
+      }
+
+    }
+    // ensure this style is our custom style and increment its use count.
+    if (style) {
+      style._useCount = style._useCount || 0;
+      // increment use count if we changed styles
+      if (styleInfo.customStyle != style) {
+        style._useCount++;
+      }
+      styleInfo.customStyle = style;
+    }
+    // @media rules may be stale in IE 10 and 11
+    if (IS_IE) {
+      style.textContent = style.textContent;
+    }
+    return style;
+  }
+
+  applyCustomStyle(style, properties) {
+    let rules = rulesForStyle(style);
+    let self = this;
+    style.textContent = toCssText(rules, function(rule) {
+      let css = rule.cssText = rule.parsedCssText;
+      if (rule.propertyInfo && rule.propertyInfo.cssText) {
+        // remove property assignments
+        // so next function isn't confused
+        // NOTE: we have 3 categories of css:
+        // (1) normal properties,
+        // (2) custom property assignments (--foo: red;),
+        // (3) custom property usage: border: var(--foo); @apply(--foo);
+        // In elements, 1 and 3 are separated for efficiency; here they
+        // are not and this makes this case unique.
+        css = removeCustomPropAssignment(css);
+        // replace with reified properties, scenario is same as mixin
+        rule.cssText = self.valueForProperties(css, properties);
+      }
+    });
+  }
+}
+
+function addToBitMask(n, bits) {
+  let o = parseInt(n / 32);
+  let v = 1 << (n % 32);
+  bits[o] = (bits[o] || 0) | v;
+}
+
+var StyleProperties$1 = new StyleProperties();
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+let placeholderMap = {};
+
+const ce = window.customElements;
+if (ce && !nativeShadow) {
+  const origDefine = ce.define;
+  ce.define = function(name, clazz, options) {
+    placeholderMap[name] = applyStylePlaceHolder(name);
+    return origDefine.call(ce, name, clazz, options);
+  };
+}
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+class StyleCache {
+  constructor(typeMax = 100) {
+    // map element name -> [{properties, styleElement, scopeSelector}]
+    this.cache = {};
+    this.typeMax = typeMax;
+  }
+
+  _validate(cacheEntry, properties, ownPropertyNames) {
+    for (let idx = 0; idx < ownPropertyNames.length; idx++) {
+      let pn = ownPropertyNames[idx];
+      if (cacheEntry.properties[pn] !== properties[pn]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  store(tagname, properties, styleElement, scopeSelector) {
+    let list = this.cache[tagname] || [];
+    list.push({properties, styleElement, scopeSelector});
+    if (list.length > this.typeMax) {
+      list.shift();
+    }
+    this.cache[tagname] = list;
+  }
+
+  fetch(tagname, properties, ownPropertyNames) {
+    let list = this.cache[tagname];
+    if (!list) {
+      return;
+    }
+    // reverse list for most-recent lookups
+    for (let idx = list.length - 1; idx >= 0; idx--) {
+      let entry = list[idx];
+      if (this._validate(entry, properties, ownPropertyNames)) {
+        return entry;
+      }
+    }
+  }
+}
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+/**
+ * The apply shim simulates the behavior of `@apply` proposed at
+ * https://tabatkins.github.io/specs/css-apply-rule/.
+ * The approach is to convert a property like this:
+ *
+ *    --foo: {color: red; background: blue;}
+ *
+ * to this:
+ *
+ *    --foo_-_color: red;
+ *    --foo_-_background: blue;
+ *
+ * Then where `@apply --foo` is used, that is converted to:
+ *
+ *    color: var(--foo_-_color);
+ *    background: var(--foo_-_background);
+ *
+ * This approach generally works but there are some issues and limitations.
+ * Consider, for example, that somewhere *between* where `--foo` is set and used,
+ * another element sets it to:
+ *
+ *    --foo: { border: 2px solid red; }
+ *
+ * We must now ensure that the color and background from the previous setting
+ * do not apply. This is accomplished by changing the property set to this:
+ *
+ *    --foo_-_border: 2px solid red;
+ *    --foo_-_color: initial;
+ *    --foo_-_background: initial;
+ *
+ * This works but introduces one new issue.
+ * Consider this setup at the point where the `@apply` is used:
+ *
+ *    background: orange;
+ *    @apply --foo;
+ *
+ * In this case the background will be unset (initial) rather than the desired
+ * `orange`. We address this by altering the property set to use a fallback
+ * value like this:
+ *
+ *    color: var(--foo_-_color);
+ *    background: var(--foo_-_background, orange);
+ *    border: var(--foo_-_border);
+ *
+ * Note that the default is retained in the property set and the `background` is
+ * the desired `orange`. This leads us to a limitation.
+ *
+ * Limitation 1:
+
+ * Only properties in the rule where the `@apply`
+ * is used are considered as default values.
+ * If another rule matches the element and sets `background` with
+ * less specificity than the rule in which `@apply` appears,
+ * the `background` will not be set.
+ *
+ * Limitation 2:
+ *
+ * When using Polymer's `updateStyles` api, new properties may not be set for
+ * `@apply` properties.
+
+*/
+
+let MIXIN_MATCH = rx.MIXIN_MATCH;
+let VAR_ASSIGN = rx.VAR_ASSIGN;
+
+let APPLY_NAME_CLEAN = /;\s*/m;
+let INITIAL_INHERIT = /^\s*(initial)|(inherit)\s*$/;
+
+// separator used between mixin-name and mixin-property-name when producing properties
+// NOTE: plain '-' may cause collisions in user styles
+let MIXIN_VAR_SEP = '_-_';
+
+// map of mixin to property names
+// --foo: {border: 2px} -> {properties: {(--foo, ['border'])}, dependants: {'element-name': proto}}
+class MixinMap {
+  constructor() {
+    this._map = {};
+  }
+  set(name, props) {
+    name = name.trim();
+    this._map[name] = {
+      properties: props,
+      dependants: {}
+    };
+  }
+  get(name) {
+    name = name.trim();
+    return this._map[name];
+  }
+}
+
+class ApplyShim {
+  constructor() {
+    this._currentTemplate = null;
+    this._measureElement = null;
+    this._map = new MixinMap();
+    this._separator = MIXIN_VAR_SEP;
+    this._boundProduceCssProperties = (
+      matchText, propertyName, valueProperty, valueMixin) =>
+        this._produceCssProperties(
+          matchText, propertyName, valueProperty, valueMixin);
+  }
+  // return true if `cssText` contains a mixin definition or consumption
+  detectMixin(cssText) {
+    const has = MIXIN_MATCH.test(cssText) || VAR_ASSIGN.test(cssText);
+    // reset state of the regexes
+    MIXIN_MATCH.lastIndex = 0;
+    VAR_ASSIGN.lastIndex = 0;
+    return has;
+  }
+  transformStyle(style, elementName) {
+    let ast = rulesForStyle(style);
+    this.transformRules(ast, elementName);
+    return ast;
+  }
+  transformRules(rules, elementName) {
+    this._currentTemplate = templateMap[elementName];
+    forEachRule(rules, (r) => {
+      this.transformRule(r);
+    });
+    this._currentTemplate = null;
+  }
+  transformRule(rule) {
+    rule.cssText = this.transformCssText(rule.parsedCssText);
+    // :root was only used for variable assignment in property shim,
+    // but generates invalid selectors with real properties.
+    // replace with `:host > *`, which serves the same effect
+    if (rule.selector === ':root') {
+      rule.selector = ':host > *';
+    }
+  }
+  transformCssText(cssText) {
+    // produce variables
+    cssText = cssText.replace(VAR_ASSIGN, this._boundProduceCssProperties);
+    // consume mixins
+    return this._consumeCssProperties(cssText);
+  }
+  _getInitialValueForProperty(property) {
+    if (!this._measureElement) {
+      this._measureElement = document.createElement('meta');
+      this._measureElement.style.all = 'initial';
+      document.head.appendChild(this._measureElement);
+    }
+    return window.getComputedStyle(this._measureElement).getPropertyValue(property);
+  }
+  // replace mixin consumption with variable consumption
+  _consumeCssProperties(text) {
+    let m;
+    // loop over text until all mixins with defintions have been applied
+    while((m = MIXIN_MATCH.exec(text))) {
+      let matchText = m[0];
+      let mixinName = m[1];
+      let idx = m.index;
+      // collect properties before apply to be "defaults" if mixin might override them
+      // match includes a "prefix", so find the start and end positions of @apply
+      let applyPos = idx + matchText.indexOf('@apply');
+      let afterApplyPos = idx + matchText.length;
+      // find props defined before this @apply
+      let textBeforeApply = text.slice(0, applyPos);
+      let textAfterApply = text.slice(afterApplyPos);
+      let defaults = this._cssTextToMap(textBeforeApply);
+      let replacement = this._atApplyToCssProperties(mixinName, defaults);
+      // use regex match position to replace mixin, keep linear processing time
+      text = [textBeforeApply, replacement, textAfterApply].join('');
+      // move regex search to _after_ replacement
+      MIXIN_MATCH.lastIndex = idx + replacement.length;
+    }
+    return text;
+  }
+  // produce variable consumption at the site of mixin consumption
+  // @apply --foo; -> for all props (${propname}: var(--foo_-_${propname}, ${fallback[propname]}}))
+  // Example:
+  // border: var(--foo_-_border); padding: var(--foo_-_padding, 2px)
+  _atApplyToCssProperties(mixinName, fallbacks) {
+    mixinName = mixinName.replace(APPLY_NAME_CLEAN, '');
+    let vars = [];
+    let mixinEntry = this._map.get(mixinName);
+    // if we depend on a mixin before it is created
+    // make a sentinel entry in the map to add this element as a dependency for when it is defined.
+    if (!mixinEntry) {
+      this._map.set(mixinName, {});
+      mixinEntry = this._map.get(mixinName);
+    }
+    if (mixinEntry) {
+      if (this._currentTemplate) {
+        mixinEntry.dependants[this._currentTemplate.name] = this._currentTemplate;
+      }
+      let p, parts, f;
+      for (p in mixinEntry.properties) {
+        f = fallbacks && fallbacks[p];
+        parts = [p, ': var(', mixinName, MIXIN_VAR_SEP, p];
+        if (f) {
+          parts.push(',', f);
+        }
+        parts.push(')');
+        vars.push(parts.join(''));
+      }
+    }
+    return vars.join('; ');
+  }
+
+  _replaceInitialOrInherit(property, value) {
+    let match = INITIAL_INHERIT.exec(value);
+    if (match) {
+      if (match[1]) {
+        // initial
+        // replace `initial` with the concrete initial value for this property
+        value = ApplyShim._getInitialValueForProperty(property);
+      } else {
+        // inherit
+        // with this purposfully illegal value, the variable will be invalid at
+        // compute time (https://www.w3.org/TR/css-variables/#invalid-at-computed-value-time)
+        // and for inheriting values, will behave similarly
+        // we cannot support the same behavior for non inheriting values like 'border'
+        value = 'apply-shim-inherit';
+      }
+    }
+    return value;
+  }
+
+  // "parse" a mixin definition into a map of properties and values
+  // cssTextToMap('border: 2px solid black') -> ('border', '2px solid black')
+  _cssTextToMap(text) {
+    let props = text.split(';');
+    let property, value;
+    let out = {};
+    for (let i = 0, p, sp; i < props.length; i++) {
+      p = props[i];
+      if (p) {
+        sp = p.split(':');
+        // ignore lines that aren't definitions like @media
+        if (sp.length > 1) {
+          property = sp[0].trim();
+          // some properties may have ':' in the value, like data urls
+          value = this._replaceInitialOrInherit(property, sp.slice(1).join(':'));
+          out[property] = value;
+        }
+      }
+    }
+    return out;
+  }
+
+  _invalidateMixinEntry(mixinEntry) {
+    for (let elementName in mixinEntry.dependants) {
+      if (!this._currentTemplate || elementName !== this._currentTemplate.name) {
+        StyleInfo.invalidate(elementName);
+      }
+    }
+  }
+
+  _produceCssProperties(matchText, propertyName, valueProperty, valueMixin) {
+    // handle case where property value is a mixin
+    if (valueProperty) {
+      // form: --mixin2: var(--mixin1), where --mixin1 is in the map
+      processVariableAndFallback(valueProperty, (prefix, value) => {
+        if (value && this._map.get(value)) {
+          valueMixin = '@apply ' + value + ';';
+        }
+      });
+    }
+    if (!valueMixin) {
+      return matchText;
+    }
+    let mixinAsProperties = this._consumeCssProperties(valueMixin);
+    let prefix = matchText.slice(0, matchText.indexOf('--'));
+    let mixinValues = this._cssTextToMap(mixinAsProperties);
+    let combinedProps = mixinValues;
+    let mixinEntry = this._map.get(propertyName);
+    let oldProps = mixinEntry && mixinEntry.properties;
+    if (oldProps) {
+      // NOTE: since we use mixin, the map of properties is updated here
+      // and this is what we want.
+      combinedProps = Object.assign(Object.create(oldProps), mixinValues);
+    } else {
+      this._map.set(propertyName, combinedProps);
+    }
+    let out = [];
+    let p, v;
+    // set variables defined by current mixin
+    let needToInvalidate = false;
+    for (p in combinedProps) {
+      v = mixinValues[p];
+      // if property not defined by current mixin, set initial
+      if (v === undefined) {
+        v = 'initial';
+      }
+      if (oldProps && !(p in oldProps)) {
+        needToInvalidate = true;
+      }
+      out.push(propertyName + MIXIN_VAR_SEP + p + ': ' + v);
+    }
+    if (needToInvalidate) {
+      this._invalidateMixinEntry(mixinEntry);
+    }
+    if (mixinEntry) {
+      mixinEntry.properties = combinedProps;
+    }
+    // because the mixinMap is global, the mixin might conflict with
+    // a different scope's simple variable definition:
+    // Example:
+    // some style somewhere:
+    // --mixin1:{ ... }
+    // --mixin2: var(--mixin1);
+    // some other element:
+    // --mixin1: 10px solid red;
+    // --foo: var(--mixin1);
+    // In this case, we leave the original variable definition in place.
+    if (valueProperty) {
+      prefix = matchText + ';' + prefix;
+    }
+    return prefix + out.join('; ') + ';';
+  }
+}
+
+let applyShim = new ApplyShim();
+window['ApplyShim'] = applyShim;
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+let flush = function() {};
+
+if (!nativeShadow) {
+  let elementNeedsScoping = (element) => {
+    return (element.classList &&
+      !element.classList.contains(StyleTransformer$1.SCOPE_NAME) ||
+      // note: necessary for IE11
+      (element instanceof SVGElement && (!element.hasAttribute('class') ||
+      element.getAttribute('class').indexOf(StyleTransformer$1.SCOPE_NAME) < 0)));
+  };
+
+  let handler = (mxns) => {
+    for (let x=0; x < mxns.length; x++) {
+      let mxn = mxns[x];
+      if (mxn.target === document.documentElement ||
+        mxn.target === document.head) {
+        continue;
+      }
+      for (let i=0; i < mxn.addedNodes.length; i++) {
+        let n = mxn.addedNodes[i];
+        if (elementNeedsScoping(n)) {
+          let root = n.getRootNode();
+          if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+            // may no longer be in a shadowroot
+            let host = root.host;
+            if (host) {
+              let scope = host.is || host.localName;
+              StyleTransformer$1.dom(n, scope);
+            }
+          }
+        }
+      }
+      for (let i=0; i < mxn.removedNodes.length; i++) {
+        let n = mxn.removedNodes[i];
+        if (n.nodeType === Node.ELEMENT_NODE) {
+          let classes = undefined;
+          if (n.classList) {
+            classes = Array.from(n.classList);
+          } else if (n.hasAttribute('class')) {
+            classes = n.getAttribute('class').split(/\s+/);
+          }
+          if (classes !== undefined) {
+            // NOTE: relies on the scoping class always being adjacent to the
+            // SCOPE_NAME class.
+            let classIdx = classes.indexOf(StyleTransformer$1.SCOPE_NAME);
+            if (classIdx >= 0) {
+              let scope = classes[classIdx + 1];
+              if (scope) {
+                StyleTransformer$1.dom(n, scope, true);
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+  let observer = new MutationObserver(handler);
+  let start = (node) => {
+    observer.observe(node, {childList: true, subtree: true});
+  };
+  let nativeCustomElements = (window.customElements &&
+    !window.customElements.flush);
+  // need to start immediately with native custom elements
+  // TODO(dfreedm): with polyfilled HTMLImports and native custom elements
+  // excessive mutations may be observed; this can be optimized via cooperation
+  // with the HTMLImports polyfill.
+  if (nativeCustomElements) {
+    start(document);
+  } else {
+    let delayedStart = () => {
+      start(document.body);
+    };
+    // use polyfill timing if it's available
+    if (window.HTMLImports) {
+      window.HTMLImports.whenReady(delayedStart);
+    // otherwise push beyond native imports being ready
+    // which requires RAF + readystate interactive.
+    } else {
+      requestAnimationFrame(function() {
+        if (document.readyState === 'loading') {
+          let listener = function() {
+            delayedStart();
+            document.removeEventListener('readystatechange', listener);
+          };
+          document.addEventListener('readystatechange', listener);
+        } else {
+          delayedStart();
+        }
+      });
+    }
+  }
+
+  flush = function() {
+    handler(observer.takeRecords());
+  };
+}
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+// TODO(dfreedm): consider spliting into separate global
+let styleCache = new StyleCache();
+
+class ShadyCSS {
+  constructor() {
+    this._scopeCounter = {};
+    this._documentOwner = document.documentElement;
+    this._documentOwnerStyleInfo = StyleInfo.set(document.documentElement, new StyleInfo({rules: []}));
+    this._elementsHaveApplied = false;
+  }
+  get nativeShadow() {
+    return nativeShadow;
+  }
+  get nativeCss() {
+    return nativeCssVariables;
+  }
+  get nativeCssApply() {
+    return nativeCssApply;
+  }
+  flush() {
+    flush();
+  }
+  _generateScopeSelector(name) {
+    let id = this._scopeCounter[name] = (this._scopeCounter[name] || 0) + 1;
+    return `${name}-${id}`;
+  }
+  getStyleAst(style) {
+    return rulesForStyle(style);
+  }
+  styleAstToString(ast) {
+    return toCssText(ast);
+  }
+  _gatherStyles(template) {
+    let styles = template.content.querySelectorAll('style');
+    let cssText = [];
+    for (let i = 0; i < styles.length; i++) {
+      let s = styles[i];
+      cssText.push(s.textContent);
+      s.parentNode.removeChild(s);
+    }
+    return cssText.join('').trim();
+  }
+  _getCssBuild(template) {
+    let style = template.content.querySelector('style');
+    if (!style) {
+      return '';
+    }
+    return style.getAttribute('css-build') || '';
+  }
+  prepareTemplate(template, elementName, typeExtension) {
+    if (template._prepared) {
+      return;
+    }
+    template._prepared = true;
+    template.name = elementName;
+    template.extends = typeExtension;
+    templateMap[elementName] = template;
+    let cssBuild = this._getCssBuild(template);
+    let cssText = this._gatherStyles(template);
+    let info = {
+      is: elementName,
+      extends: typeExtension,
+      __cssBuild: cssBuild,
+    };
+    if (!this.nativeShadow) {
+      StyleTransformer$1.dom(template.content, elementName);
+    }
+    // check if the styling has mixin definitions or uses
+    let hasMixins = applyShim.detectMixin(cssText);
+    let ast = parse(cssText);
+    // only run the applyshim transforms if there is a mixin involved
+    if (hasMixins && this.nativeCss && !this.nativeCssApply) {
+      applyShim.transformRules(ast, elementName);
+    }
+    template._styleAst = ast;
+
+    let ownPropertyNames = [];
+    if (!this.nativeCss) {
+      ownPropertyNames = StyleProperties$1.decorateStyles(template._styleAst, info);
+    }
+    if (!ownPropertyNames.length || this.nativeCss) {
+      let root = this.nativeShadow ? template.content : null;
+      let placeholder = placeholderMap[elementName];
+      let style = this._generateStaticStyle(info, template._styleAst, root, placeholder);
+      template._style = style;
+    }
+    template._ownPropertyNames = ownPropertyNames;
+  }
+  _generateStaticStyle(info, rules, shadowroot, placeholder) {
+    let cssText = StyleTransformer$1.elementStyles(info, rules);
+    if (cssText.length) {
+      return applyCss(cssText, info.is, shadowroot, placeholder);
+    }
+  }
+  _prepareHost(host) {
+    let is = host.getAttribute('is') || host.localName;
+    let typeExtension;
+    if (is !== host.localName) {
+      typeExtension = host.localName;
+    }
+    let placeholder = placeholderMap[is];
+    let template = templateMap[is];
+    let ast;
+    let ownStylePropertyNames;
+    let cssBuild;
+    if (template) {
+      ast = template._styleAst;
+      ownStylePropertyNames = template._ownPropertyNames;
+      cssBuild = template._cssBuild;
+    }
+    return StyleInfo.set(host,
+      new StyleInfo(
+        ast,
+        placeholder,
+        ownStylePropertyNames,
+        is,
+        typeExtension,
+        cssBuild
+      )
+    );
+  }
+  applyStyle(host, overrideProps) {
+    let is = host.getAttribute('is') || host.localName;
+    let styleInfo = StyleInfo.get(host);
+    let hasApplied = Boolean(styleInfo);
+    if (!styleInfo) {
+      styleInfo = this._prepareHost(host);
+    }
+    // Only trip the `elementsHaveApplied` flag if a node other that the root document has `applyStyle` called
+    if (!this._isRootOwner(host)) {
+      this._elementsHaveApplied = true;
+    }
+    if (window.CustomStyle) {
+      let CS = window.CustomStyle;
+      if (CS._documentDirty) {
+        CS.findStyles();
+        if (!this.nativeCss) {
+          this._updateProperties(this._documentOwner, this._documentOwnerStyleInfo);
+        } else if (!this.nativeCssApply) {
+          CS._revalidateApplyShim();
+        }
+        CS.applyStyles();
+        // if no elements have booted yet, we can just update the document and be done
+        if (!this._elementsHaveApplied) {
+          return;
+        }
+        // if no native css custom properties, we must recalculate the whole tree
+        if (!this.nativeCss) {
+          this.updateStyles();
+          /*
+          When updateStyles() runs, this element may not have a shadowroot yet.
+          If not, we need to make sure that this element runs `applyStyle` on itself at least once to generate a style
+          */
+          if (hasApplied) {
+            return;
+          }
+        }
+      }
+    }
+    if (overrideProps) {
+      styleInfo.overrideStyleProperties =
+        styleInfo.overrideStyleProperties || {};
+      Object.assign(styleInfo.overrideStyleProperties, overrideProps);
+    }
+    if (this.nativeCss) {
+      if (styleInfo.overrideStyleProperties) {
+        this._updateNativeProperties(host, styleInfo.overrideStyleProperties);
+      }
+      let template = templateMap[is];
+      // bail early if there is no shadowroot for this element
+      if (!template && !this._isRootOwner(host)) {
+        return;
+      }
+      if (template && template._applyShimInvalid && template._style) {
+        // update template
+        if (!template._validating) {
+          applyShim.transformRules(template._styleAst, is);
+          template._style.textContent = StyleTransformer$1.elementStyles(host, styleInfo.styleRules);
+          StyleInfo.startValidating(is);
+        }
+        // update instance if native shadowdom
+        if (this.nativeShadow) {
+          let root = host.shadowRoot;
+          if (root) {
+            let style = root.querySelector('style');
+            style.textContent = StyleTransformer$1.elementStyles(host, styleInfo.styleRules);
+          }
+        }
+        styleInfo.styleRules = template._styleAst;
+      }
+    } else {
+      this._updateProperties(host, styleInfo);
+      if (styleInfo.ownStylePropertyNames && styleInfo.ownStylePropertyNames.length) {
+        this._applyStyleProperties(host, styleInfo);
+      }
+    }
+    if (hasApplied) {
+      let root = this._isRootOwner(host) ? host : host.shadowRoot;
+      // note: some elements may not have a root!
+      if (root) {
+        this._applyToDescendants(root);
+      }
+    }
+  }
+  _applyToDescendants(root) {
+    // note: fallback to childNodes to support recursing into SVG which
+    // does not support children in some browsers (Edge/IE)
+    let c$ = root.children || root.childNodes;
+    for (let i = 0, c; i < c$.length; i++) {
+      c = c$[i];
+      if (c.shadowRoot) {
+        this.applyStyle(c);
+      }
+      this._applyToDescendants(c);
+    }
+  }
+  _styleOwnerForNode(node) {
+    let root = node.getRootNode();
+    let host = root.host;
+    if (host) {
+      if (StyleInfo.get(host)) {
+        return host;
+      } else {
+        return this._styleOwnerForNode(host);
+      }
+    }
+    return this._documentOwner;
+  }
+  _isRootOwner(node) {
+    return (node === this._documentOwner);
+  }
+  _applyStyleProperties(host, styleInfo) {
+    let is = host.getAttribute('is') || host.localName;
+    let cacheEntry = styleCache.fetch(is, styleInfo.styleProperties, styleInfo.ownStylePropertyNames);
+    let cachedScopeSelector = cacheEntry && cacheEntry.scopeSelector;
+    let cachedStyle = cacheEntry ? cacheEntry.styleElement : null;
+    let oldScopeSelector = styleInfo.scopeSelector;
+    // only generate new scope if cached style is not found
+    styleInfo.scopeSelector = cachedScopeSelector || this._generateScopeSelector(is);
+    let style = StyleProperties$1.applyElementStyle(host, styleInfo.styleProperties, styleInfo.scopeSelector, cachedStyle);
+    if (!this.nativeShadow) {
+      StyleProperties$1.applyElementScopeSelector(host, styleInfo.scopeSelector, oldScopeSelector);
+    }
+    if (!cacheEntry) {
+      styleCache.store(is, styleInfo.styleProperties, style, styleInfo.scopeSelector);
+    }
+    return style;
+  }
+  _updateProperties(host, styleInfo) {
+    let owner = this._styleOwnerForNode(host);
+    let ownerStyleInfo = StyleInfo.get(owner);
+    let ownerProperties = ownerStyleInfo.styleProperties;
+    let props = Object.create(ownerProperties || null);
+    let hostAndRootProps = StyleProperties$1.hostAndRootPropertiesForScope(host, styleInfo.styleRules);
+    let propertyData = StyleProperties$1.propertyDataFromStyles(ownerStyleInfo.styleRules, host);
+    let propertiesMatchingHost = propertyData.properties;
+    Object.assign(
+      props,
+      hostAndRootProps.hostProps,
+      propertiesMatchingHost,
+      hostAndRootProps.rootProps
+    );
+    this._mixinOverrideStyles(props, styleInfo.overrideStyleProperties);
+    StyleProperties$1.reify(props);
+    styleInfo.styleProperties = props;
+  }
+  _mixinOverrideStyles(props, overrides) {
+    for (let p in overrides) {
+      let v = overrides[p];
+      // skip override props if they are not truthy or 0
+      // in order to fall back to inherited values
+      if (v || v === 0) {
+        props[p] = v;
+      }
+    }
+  }
+  _updateNativeProperties(element, properties) {
+    // remove previous properties
+    for (let p in properties) {
+      // NOTE: for bc with shim, don't apply null values.
+      if (p === null) {
+        element.style.removeProperty(p);
+      } else {
+        element.style.setProperty(p, properties[p]);
+      }
+    }
+  }
+  updateStyles(properties) {
+    this.applyStyle(this._documentOwner, properties);
+  }
+  /* Custom Style operations */
+  _transformCustomStyleForDocument(style) {
+    let ast = rulesForStyle(style);
+    forEachRule(ast, (rule) => {
+      if (nativeShadow) {
+        StyleTransformer$1.normalizeRootSelector(rule);
+      } else {
+        StyleTransformer$1.documentRule(rule);
+      }
+      if (this.nativeCss && !this.nativeCssApply) {
+        applyShim.transformRule(rule);
+      }
+    });
+    if (this.nativeCss) {
+      style.textContent = toCssText(ast);
+    } else {
+      this._documentOwnerStyleInfo.styleRules.rules.push(ast);
+    }
+  }
+  _revalidateApplyShim(style) {
+    if (this.nativeCss && !this.nativeCssApply) {
+      let ast = rulesForStyle(style);
+      applyShim.transformRules(ast);
+      style.textContent = toCssText(ast);
+    }
+  }
+  _applyCustomStyleToDocument(style) {
+    if (!this.nativeCss) {
+      StyleProperties$1.applyCustomStyle(style, this._documentOwnerStyleInfo.styleProperties);
+    }
+  }
+  getComputedStyleValue(element, property) {
+    let value;
+    if (!this.nativeCss) {
+      // element is either a style host, or an ancestor of a style host
+      let styleInfo = StyleInfo.get(element) || StyleInfo.get(this._styleOwnerForNode(element));
+      value = styleInfo.styleProperties[property];
+    }
+    // fall back to the property value from the computed styling
+    value = value || window.getComputedStyle(element).getPropertyValue(property);
+    // trim whitespace that can come after the `:` in css
+    // example: padding: 2px -> " 2px"
+    return value.trim();
+  }
+  // given an element and a classString, replaces
+  // the element's class with the provided classString and adds
+  // any necessary ShadyCSS static and property based scoping selectors
+  setElementClass(element, classString) {
+    let root = element.getRootNode();
+    let classes = classString ? classString.split(/\s/) : [];
+    let scopeName = root.host && root.host.localName;
+    // If no scope, try to discover scope name from existing class.
+    // This can occur if, for example, a template stamped element that
+    // has been scoped is manipulated when not in a root.
+    if (!scopeName) {
+      var classAttr = element.getAttribute('class');
+      if (classAttr) {
+        let k$ = classAttr.split(/\s/);
+        for (let i=0; i < k$.length; i++) {
+          if (k$[i] === StyleTransformer$1.SCOPE_NAME) {
+            scopeName = k$[i+1];
+            break;
+          }
+        }
+      }
+    }
+    if (scopeName) {
+      classes.push(StyleTransformer$1.SCOPE_NAME, scopeName);
+    }
+    if (!this.nativeCss) {
+      let styleInfo = StyleInfo.get(element);
+      if (styleInfo && styleInfo.scopeSelector) {
+        classes.push(StyleProperties$1.XSCOPE_NAME, styleInfo.scopeSelector);
+      }
+    }
+    setElementClassRaw(element, classes.join(' '));
+  }
+  _styleInfoForNode(node) {
+    return StyleInfo.get(node);
+  }
+}
+
+window['ShadyCSS'] = new ShadyCSS();
+
+/**
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/*
+Wrapper over <style> elements to co-operate with ShadyCSS
+
+Example:
+<custom-style>
+  <style>
+  ...
+  </style>
+</custom-style>
+*/
+
+let ShadyCSS$1 = window.ShadyCSS;
+
+let enqueued = false;
+
+let customStyles = [];
+
+let hookFn = null;
+
+/*
+If a page only has <custom-style> elements, it will flash unstyled content,
+as all the instances will boot asynchronously after page load.
+
+Calling ShadyCSS.updateStyles() will force the work to happen synchronously
+*/
+function enqueueDocumentValidation() {
+  if (enqueued) {
+    return;
+  }
+  enqueued = true;
+  if (window.HTMLImports) {
+    window.HTMLImports.whenReady(validateDocument);
+  } else if (document.readyState === 'complete') {
+    validateDocument();
+  } else {
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'complete') {
+        validateDocument();
+      }
+    });
+  }
+}
+
+function validateDocument() {
+  requestAnimationFrame(() => {
+    if (enqueued || ShadyCSS$1._elementsHaveApplied) {
+      ShadyCSS$1.updateStyles();
+    }
+    enqueued = false;
+  });
+}
+
+class CustomStyle extends HTMLElement {
+  static get _customStyles() {
+    return customStyles;
+  }
+  static get processHook() {
+    return hookFn;
+  }
+  static set processHook(fn) {
+    hookFn = fn;
+  }
+  static get _documentDirty() {
+    return enqueued;
+  }
+  static findStyles() {
+    for (let i = 0; i < customStyles.length; i++) {
+      let c = customStyles[i];
+      if (!c._style) {
+        let style = c.querySelector('style');
+        if (!style) {
+          continue;
+        }
+        // HTMLImports polyfill may have cloned the style into the main document,
+        // which is referenced with __appliedElement.
+        // Also, we must copy over the attributes.
+        if (style.__appliedElement) {
+          for (let i = 0; i < style.attributes.length; i++) {
+            let attr = style.attributes[i];
+            style.__appliedElement.setAttribute(attr.name, attr.value);
+          }
+        }
+        c._style = style.__appliedElement || style;
+        if (hookFn) {
+          hookFn(c._style);
+        }
+        ShadyCSS$1._transformCustomStyleForDocument(c._style);
+      }
+    }
+  }
+  static _revalidateApplyShim() {
+    for (let i = 0; i < customStyles.length; i++) {
+      let c = customStyles[i];
+      if (c._style) {
+        ShadyCSS$1._revalidateApplyShim(c._style);
+      }
+    }
+  }
+  static applyStyles() {
+    for (let i = 0; i < customStyles.length; i++) {
+      let c = customStyles[i];
+      if (c._style) {
+        ShadyCSS$1._applyCustomStyleToDocument(c._style);
+      }
+    }
+    enqueued = false;
+  }
+  constructor() {
+    super();
+    customStyles.push(this);
+    enqueueDocumentValidation();
+  }
+}
+
+window['CustomStyle'] = CustomStyle;
+window.customElements.define('custom-style', CustomStyle);
+
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+/*
+ * Polyfills loaded: None
+ * Used in: Chrome
+ */
+
+// TODO: This needs to not exist at all.
+
+// TODO(notwaldorf): Remove after this is addressed:
+// https://github.com/webcomponents/shadycss/issues/46
+
+}());
+
 //# sourceMappingURL=webcomponents-none.js.map

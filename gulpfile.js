@@ -57,7 +57,7 @@ function minify(sourceName, fileName, needsContext) {
   .pipe(source(sourceName +'-index.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init({loadMaps: true}))
-  // .pipe(babel(babiliConfig))
+  .pipe(babel(babiliConfig))
   .pipe(rename(fileName + '.js'))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./'))

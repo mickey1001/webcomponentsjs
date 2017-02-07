@@ -1,6 +1,7 @@
 {
   "suites": ["tests/runner.html"],
   "clientOptions": {
-    "environmentImports": []
+    "environmentImports": [],
+    "waitForFrameworks": false
   }
 }

@@ -13,7 +13,6 @@ script:
 - npm install -g bower
 - bower install
 - xvfb-run wct
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'windows 10/microsoftedge@14' -s 'windows 8.1/internet explorer@11' -s 'os x 10.11/safari@10' -s 'os x 10.11/safari@9'; fi
 env:
   global:
   - secure: Fpp9LwJSGOdTrSIImQTlbzxozBsqe/2AJN5OfTXSe12FZxqzz50gevdxQcIlLypKaNyCtjb980DJbwdJR2cXUqaunLZAPWxrKa7ZPwamUxW+zVL7EHqy5zuvD+yJ+Vmk3ahs3WBTVyJ8T3XoaSfo9VumDIcKggWGJwgvM3blIMg=

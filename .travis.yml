@@ -12,7 +12,8 @@ addons:
 script:
 - npm install -g bower
 - bower install
-- xvfb-run wct
+- xvfb-run wct -l chrome
+- xvfb-run wct -l firefox
 env:
   global:
   - secure: Fpp9LwJSGOdTrSIImQTlbzxozBsqe/2AJN5OfTXSe12FZxqzz50gevdxQcIlLypKaNyCtjb980DJbwdJR2cXUqaunLZAPWxrKa7ZPwamUxW+zVL7EHqy5zuvD+yJ+Vmk3ahs3WBTVyJ8T3XoaSfo9VumDIcKggWGJwgvM3blIMg=
